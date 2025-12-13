@@ -47,6 +47,26 @@ export interface WordPressResponse<T> {
 const USER_AGENT = "Next.js WordPress Client";
 const CACHE_TTL = 3600; // 1 hour
 
+// Development mode detection
+const isDevelopment = process.env.NODE_ENV === "development";
+
+// Configure fetch options for development (to handle self-signed certificates)
+const getFetchOptions = () => {
+  const options: RequestInit = {
+    headers: { "User-Agent": USER_AGENT },
+  };
+
+  // In development, allow self-signed certificates for local WordPress instances
+  if (isDevelopment && baseUrl?.includes("https://")) {
+    // @ts-ignore - Node.js specific option
+    options.agent = new (require("https").Agent)({
+      rejectUnauthorized: false,
+    });
+  }
+
+  return options;
+};
+
 // Core fetch - throws on error (for functions that require data)
 async function wordpressFetch<T>(
   path: string,
@@ -59,20 +79,31 @@ async function wordpressFetch<T>(
 
   const url = `${baseUrl}${path}${query ? `?${querystring.stringify(query)}` : ""}`;
 
-  const response = await fetch(url, {
-    headers: { "User-Agent": USER_AGENT },
-    next: { tags, revalidate: CACHE_TTL },
-  });
+  try {
+    const fetchOptions = getFetchOptions();
+    const response = await fetch(url, {
+      ...fetchOptions,
+      next: { tags, revalidate: CACHE_TTL },
+    });
 
-  if (!response.ok) {
-    throw new WordPressAPIError(
-      `WordPress API request failed: ${response.statusText}`,
-      response.status,
-      url
-    );
+    if (!response.ok) {
+      throw new WordPressAPIError(
+        `WordPress API request failed: ${response.statusText}`,
+        response.status,
+        url
+      );
+    }
+
+    return response.json();
+  } catch (error) {
+    if (error instanceof WordPressAPIError) {
+      throw error;
+    }
+    // Log the full URL and error for debugging
+    console.error(`Failed to fetch from WordPress URL: ${url}`);
+    console.error(`Error details:`, error);
+    throw error;
   }
-
-  return response.json();
 }
 
 // Graceful fetch - returns fallback when WordPress unavailable or on error
@@ -86,8 +117,8 @@ async function wordpressFetchGraceful<T>(
 
   try {
     return await wordpressFetch<T>(path, query, tags);
-  } catch {
-    console.warn(`WordPress fetch failed for ${path}`);
+  } catch (error) {
+    console.warn(`WordPress fetch failed for ${path}:`, error instanceof Error ? error.message : String(error));
     return fallback;
   }
 }
@@ -104,8 +135,9 @@ async function wordpressFetchPaginated<T>(
 
   const url = `${baseUrl}${path}${query ? `?${querystring.stringify(query)}` : ""}`;
 
+  const fetchOptions = getFetchOptions();
   const response = await fetch(url, {
-    headers: { "User-Agent": USER_AGENT },
+    ...fetchOptions,
     next: { tags, revalidate: CACHE_TTL },
   });
 
@@ -141,8 +173,8 @@ async function wordpressFetchPaginatedGraceful<T>(
 
   try {
     return await wordpressFetchPaginated<T[]>(path, query, tags);
-  } catch {
-    console.warn(`WordPress paginated fetch failed for ${path}`);
+  } catch (error) {
+    console.warn(`WordPress paginated fetch failed for ${path}:`, error instanceof Error ? error.message : String(error));
     return emptyResponse;
   }
 }

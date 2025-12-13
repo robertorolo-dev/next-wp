@@ -11,7 +11,36 @@ export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
   try {
-    const requestBody = await request.json();
+    // Check if the request has a valid Content-Type header
+    const contentTypeHeader = request.headers.get("content-type");
+
+    if (!contentTypeHeader || !contentTypeHeader.includes("application/json")) {
+      console.error("Invalid or missing Content-Type header:", contentTypeHeader);
+      return NextResponse.json(
+        {
+          message: "Missing content type",
+          error: "Request must have Content-Type: application/json header",
+          receivedContentType: contentTypeHeader || "none"
+        },
+        { status: 400 }
+      );
+    }
+
+    // Parse the request body
+    let requestBody;
+    try {
+      requestBody = await request.json();
+    } catch (parseError) {
+      console.error("Failed to parse JSON body:", parseError);
+      return NextResponse.json(
+        {
+          message: "Invalid JSON body",
+          error: (parseError as Error).message
+        },
+        { status: 400 }
+      );
+    }
+
     const secret = request.headers.get("x-webhook-secret");
 
     if (secret !== process.env.WORDPRESS_WEBHOOK_SECRET) {
@@ -22,24 +51,41 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { contentType, contentId } = requestBody;
+    // Support both 'contentType' and 'type' field names for flexibility
+    const contentType = requestBody.contentType || requestBody.type;
+    const contentId = requestBody.contentId || requestBody.data?.id || requestBody.id;
 
     if (!contentType) {
+      console.error("Missing contentType/type field in request body:", requestBody);
       return NextResponse.json(
-        { message: "Missing content type" },
+        {
+          message: "Missing content type",
+          error: "Request body must include either 'contentType' or 'type' field",
+          receivedBody: requestBody
+        },
         { status: 400 }
       );
     }
 
     try {
       console.log(
-        `Revalidating content: ${contentType}${
-          contentId ? ` (ID: ${contentId})` : ""
+        `Revalidating content: ${contentType}${contentId ? ` (ID: ${contentId})` : ""
         }`
       );
 
       // Revalidate specific content type tags
       revalidateTag("wordpress", { expire: 0 });
+
+      // Handle test webhooks
+      if (contentType === "test") {
+        console.log("Test webhook received successfully");
+        return NextResponse.json({
+          revalidated: false,
+          message: "Test webhook received successfully",
+          data: requestBody.data,
+          timestamp: new Date().toISOString(),
+        });
+      }
 
       if (contentType === "post") {
         revalidateTag("posts", { expire: 0 });
@@ -73,9 +119,8 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         revalidated: true,
-        message: `Revalidated ${contentType}${
-          contentId ? ` (ID: ${contentId})` : ""
-        } and related content`,
+        message: `Revalidated ${contentType}${contentId ? ` (ID: ${contentId})` : ""
+          } and related content`,
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
