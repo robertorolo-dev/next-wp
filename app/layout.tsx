@@ -40,7 +40,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        <link
+          rel="preload"
+          href="/animations/happy_robot_button.spline"
+          as="fetch"
+          crossOrigin="anonymous"
+          // @ts-ignore - fetchpriority is valid but not in types yet
+          fetchpriority="high"
+        />
+      </head>
       <body className={cn("min-h-screen font-sans antialiased", font.variable)}>
         <ThemeProvider
           attribute="class"
