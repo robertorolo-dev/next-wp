@@ -3,7 +3,6 @@ import "./globals.css";
 import { Section, Container } from "@/components/craft";
 import { Inter as FontSans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { MobileNav } from "@/components/nav/mobile-nav";
 import { Analytics } from "@vercel/analytics/react";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,9 @@ import { mainMenu, contentMenu } from "@/menu.config";
 import { siteConfig } from "@/site.config";
 import { cn } from "@/lib/utils";
 
-import Logo from "@/public/logo.svg";
+
+import Logo from "@/public/kumocode.svg";
+import cat from "@/public/luckycat.png";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -46,15 +47,16 @@ export default function RootLayout({
           href="/animations/happy_robot_button.spline"
           as="fetch"
           crossOrigin="anonymous"
-          // @ts-ignore - fetchpriority is valid but not in types yet
-          fetchpriority="high"
+          // @ts-ignore - fetchPriority is valid but not in types yet
+          fetchPriority="high"
         />
       </head>
       <body className={cn("min-h-screen font-sans antialiased", font.variable)}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          forcedTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <Nav />
@@ -75,7 +77,7 @@ const Nav = ({ className, children, id }: NavProps) => {
     >
       <div
         id="nav-container"
-        className="max-w-5xl mx-auto py-4 px-6 sm:px-8 flex justify-between items-center"
+        className="max-w-7xl mx-auto py-4 px-6 sm:px-0 flex justify-between items-center"
       >
         <Link
           className="hover:opacity-75 transition-all flex gap-4 items-center"
@@ -86,10 +88,10 @@ const Nav = ({ className, children, id }: NavProps) => {
             alt="Logo"
             loading="eager"
             className="dark:invert"
-            width={42}
+            width={170}
             height={26.44}
           ></Image>
-          <h2 className="text-sm">{siteConfig.site_name}</h2>
+
         </Link>
         {children}
         <div className="flex items-center gap-2">
@@ -119,12 +121,11 @@ const Footer = () => {
         <Container className="grid md:grid-cols-[1.5fr_0.5fr_0.5fr] gap-12">
           <div className="flex flex-col gap-6 not-prose">
             <Link href="/">
-              <h3 className="sr-only">{siteConfig.site_name}</h3>
               <Image
-                src={Logo}
-                alt="Logo"
+                src={cat}
+                alt="cat"
                 className="dark:invert"
-                width={42}
+                width={80}
                 height={26.44}
               ></Image>
             </Link>
@@ -156,7 +157,6 @@ const Footer = () => {
           </div>
         </Container>
         <Container className="border-t not-prose flex flex-col md:flex-row md:gap-2 gap-6 justify-between md:items-center">
-          <ThemeToggle />
           <p className="text-muted-foreground">
             &copy; <a href="https://9d8.dev">9d8</a>. All rights reserved.
             2025-present.

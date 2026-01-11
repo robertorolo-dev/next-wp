@@ -1,4 +1,4 @@
-import { Code2, Smartphone, Palette, Rocket, Search, Wrench } from "lucide-react"
+import { Code2, Smartphone, Palette, Rocket, Search, Wrench, Binary } from "lucide-react"
 
 export function ServicesSection() {
     const services = [
@@ -10,10 +10,10 @@ export function ServicesSection() {
             color: "bg-[#2F81F7]",
         },
         {
-            title: "Mobile Development",
+            title: "Software Development",
             description:
-                "Native and cross-platform mobile applications that deliver seamless experiences on iOS and Android devices.",
-            icon: Smartphone,
+                "Custom software development services to create tailored solutions for your business needs.",
+            icon: Binary,
             color: "bg-[#FF6B7A]",
         },
         {

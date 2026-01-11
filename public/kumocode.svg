@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2234" height="230" viewBox="0 0 2234 230">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 450px;
+        text-anchor: middle;
+        fill: #010000;
+        font-family: "Corptic DEMO";
+      }
+
+      .cls-2 {
+        font-family: "Myriad Pro";
+      }
+    </style>
+  </defs>
+  <text id="kumocode." class="cls-1" x="1112.128" y="224.555"><tspan x="1112.128">kumocode<tspan class="cls-2">.</tspan></tspan></text>
+</svg>
