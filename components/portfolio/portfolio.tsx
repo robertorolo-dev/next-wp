@@ -20,7 +20,7 @@ export async function PortfolioSection() {
                         </h2>
                     </div>
                     <div className="text-center py-12">
-                        <p className="text-muted-foreground">No portfolio items found. Add some in WordPress!</p>
+                        <p className="text-muted-foreground">No portfolio items found.</p>
                     </div>
                 </div>
             </section>
