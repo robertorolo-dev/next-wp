@@ -1,5 +1,4 @@
 // Craft Imports
-"use-client";
 import { Section, Container, Prose } from "@/components/craft";
 import { ArticlesSection } from "@/components/articles/articles";
 
@@ -18,7 +17,7 @@ import { NormalHero } from "@/components/normal-hero/normalhero";
 import { ContactForm } from "@/components/contactform/contactform";
 
 // This page is using the craft.tsx component and design system
-export default function Home() {
+export default async function Home() {
   return (
     <>
       <NormalHero />

@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
             port: "",
             pathname: "/**",
           },
+          {
+            protocol: "http" as const,
+            hostname: wordpressHostname,
+            port: "",
+            pathname: "/**",
+          },
         ]
         : []),
       {
@@ -24,7 +30,22 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      // Allow localhost for development
+      {
+        protocol: "http" as const,
+        hostname: "localhost",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "http" as const,
+        hostname: "127.0.0.1",
+        port: "",
+        pathname: "/**",
+      },
     ],
+    // Disable image optimization for local development
+    unoptimized: process.env.NODE_ENV === "development",
   },
   async redirects() {
     if (!wordpressUrl) {

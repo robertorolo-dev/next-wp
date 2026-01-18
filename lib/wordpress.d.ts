@@ -63,16 +63,16 @@ export interface Post extends WPEntity {
   sticky: boolean;
   template: string;
   format:
-    | "standard"
-    | "aside"
-    | "chat"
-    | "gallery"
-    | "link"
-    | "image"
-    | "quote"
-    | "status"
-    | "video"
-    | "audio";
+  | "standard"
+  | "aside"
+  | "chat"
+  | "gallery"
+  | "link"
+  | "image"
+  | "quote"
+  | "status"
+  | "video"
+  | "audio";
   categories: number[];
   tags: number[];
   meta: Record<string, unknown>;
@@ -216,6 +216,48 @@ export interface SearchResult {
       href: string;
     }>;
   };
+}
+
+// Portfolio Custom Post Type
+export interface Portfolio extends WPEntity {
+  title: RenderedTitle;
+  content: RenderedContent;
+  excerpt: RenderedContent;
+  featured_media: number;
+  template: string;
+  acf?: {
+    project_tag?: string;
+    project_logo?: {
+      ID: number;
+      url: string;
+      alt: string;
+      width: number;
+      height: number;
+    };
+    background_color?: string;
+    project_illustration?: {
+      ID: number;
+      url: string;
+      alt: string;
+      width: number;
+      height: number;
+    };
+    case_study_link?: string;
+    client_name?: string;
+    project_url?: string;
+    project_date?: string;
+    technologies?: string;
+    project_gallery?: Array<{
+      ID: number;
+      url: string;
+      alt: string;
+      width: number;
+      height: number;
+      title?: string;
+      caption?: string;
+    }>;
+  };
+  meta: Record<string, unknown>;
 }
 
 // Component Props Types

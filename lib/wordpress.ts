@@ -10,6 +10,7 @@ import type {
   Page,
   Author,
   FeaturedMedia,
+  Portfolio,
 } from "./wordpress.d";
 
 // Single source of truth for WordPress configuration
@@ -464,6 +465,76 @@ export async function getPostsByAuthorPaginated(
     page,
     author: authorId,
   });
+}
+
+// Portfolio Custom Post Type Functions
+export async function getAllPortfolioItems(): Promise<Portfolio[]> {
+  return wordpressFetchGraceful<Portfolio[]>(
+    "/wp-json/wp/v2/portfolio",
+    [],
+    { _embed: true, per_page: 100 },
+    ["wordpress", "portfolio"]
+  );
+}
+
+export async function getPortfolioItemsPaginated(
+  page: number = 1,
+  perPage: number = 9
+): Promise<WordPressResponse<Portfolio[]>> {
+  return wordpressFetchPaginatedGraceful<Portfolio>(
+    "/wp-json/wp/v2/portfolio",
+    {
+      _embed: true,
+      per_page: perPage,
+      page,
+    },
+    ["wordpress", "portfolio", `portfolio-page-${page}`]
+  );
+}
+
+export async function getPortfolioBySlug(
+  slug: string
+): Promise<Portfolio | undefined> {
+  const items = await wordpressFetchGraceful<Portfolio[]>(
+    "/wp-json/wp/v2/portfolio",
+    [],
+    { slug, _embed: true }
+  );
+  return items[0];
+}
+
+export async function getPortfolioById(id: number): Promise<Portfolio> {
+  return wordpressFetch<Portfolio>(`/wp-json/wp/v2/portfolio/${id}`, {
+    _embed: true,
+  });
+}
+
+// Function specifically for generateStaticParams - fetches ALL portfolio slugs
+// Returns empty array if WordPress is unavailable (allows build to succeed)
+export async function getAllPortfolioSlugs(): Promise<{ slug: string }[]> {
+  if (!isConfigured) return [];
+
+  try {
+    const allSlugs: { slug: string }[] = [];
+    let page = 1;
+    let hasMore = true;
+
+    while (hasMore) {
+      const response = await wordpressFetchPaginated<Portfolio[]>(
+        "/wp-json/wp/v2/portfolio",
+        { per_page: 100, page, _fields: "slug" }
+      );
+
+      allSlugs.push(...response.data.map((item) => ({ slug: item.slug })));
+      hasMore = page < response.headers.totalPages;
+      page++;
+    }
+
+    return allSlugs;
+  } catch {
+    console.warn("WordPress unavailable, skipping static generation for portfolio");
+    return [];
+  }
 }
 
 export { WordPressAPIError };
