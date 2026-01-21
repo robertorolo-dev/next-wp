@@ -12,7 +12,7 @@ import { siteConfig } from "@/site.config";
 import { cn } from "@/lib/utils";
 
 
-import Logo from "@/public/kumocode.svg";
+import Logo from "@/public/kumocode.png";
 import cat from "@/public/luckycat.png";
 import Image from "next/image";
 import Link from "next/link";
