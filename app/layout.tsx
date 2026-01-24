@@ -25,9 +25,9 @@ const font = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "WordPress & Next.js Starter by 9d8",
+  title: "Kumocode | High-Performance Web Development South Africa",
   description:
-    "A starter template for Next.js with WordPress as a headless CMS.",
+    "South African web development company building fast, secure, SEO-friendly websites and custom digital solutions for growing businesses.",
   metadataBase: new URL(siteConfig.site_domain),
   alternates: {
     canonical: "/",
@@ -105,7 +105,7 @@ const Nav = ({ className, children, id }: NavProps) => {
             ))}
           </div>
           <Button asChild className="hidden sm:flex">
-            <Link href="https://dub.sh/next-wp">Get Started</Link>
+            <a href="#contact" className="scroll-smooth">Get Started</a>
           </Button>
           <MobileNav />
         </div>
@@ -131,7 +131,7 @@ const Footer = () => {
             </Link>
             <p>{siteConfig.site_description}</p>
           </div>
-          <div className="flex flex-col gap-2 text-sm">
+          {/* <div className="flex flex-col gap-2 text-sm">
             <h5 className="font-medium text-base">Website</h5>
             {Object.entries(mainMenu).map(([key, href]) => (
               <Link
@@ -142,8 +142,8 @@ const Footer = () => {
                 {key.charAt(0).toUpperCase() + key.slice(1)}
               </Link>
             ))}
-          </div>
-          <div className="flex flex-col gap-2 text-sm">
+          </div> */}
+          {/* <div className="flex flex-col gap-2 text-sm">
             <h5 className="font-medium text-base">Blog</h5>
             {Object.entries(contentMenu).map(([key, href]) => (
               <Link
@@ -154,12 +154,12 @@ const Footer = () => {
                 {key.charAt(0).toUpperCase() + key.slice(1)}
               </Link>
             ))}
-          </div>
+          </div> */}
         </Container>
         <Container className="border-t not-prose flex flex-col md:flex-row md:gap-2 gap-6 justify-between md:items-center">
           <p className="text-muted-foreground">
-            &copy; <a href="https://9d8.dev">9d8</a>. All rights reserved.
-            2025-present.
+            &copy; <a href="https://kumocode.co.za">Kumocode.co.za</a>. All rights reserved.
+            2026.
           </p>
         </Container>
       </Section>
