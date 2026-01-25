@@ -44,7 +44,7 @@ export async function ArticlesSection() {
                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">Articles & News</h2>
                         <Button
                             variant="outline"
-                            className="border-[3px] border-black rounded-xl px-4 md:px-6 py-4 md:py-6 hover:bg-gray-50 bg-white font-semibold text-sm md:text-base w-full sm:w-auto"
+                            className="border-[3px] border-black rounded-xl px-4 md:px-6 py-4 md:py-6 hover:bg-gray-50 bg-white font-semibold text-sm md:text-base w-full sm:w-auto cursor-pointer"
                         >
                             <Pencil className="w-4 h-4 mr-2" />
                             Browse all articles
@@ -69,7 +69,7 @@ export async function ArticlesSection() {
                     <Link href="/posts">
                         <Button
                             variant="outline"
-                            className="border-[3px] border-black rounded-xl px-4 md:px-6 py-4 md:py-6 hover:bg-gray-50 bg-white font-semibold text-sm md:text-base w-full sm:w-auto"
+                            className="border-[3px] border-black rounded-xl px-4 md:px-6 py-4 md:py-6 hover:bg-gray-50 bg-white font-semibold text-sm md:text-base w-full sm:w-auto cursor-pointer"
                         >
                             <Pencil className="w-4 h-4 mr-2" />
                             Browse all articles
