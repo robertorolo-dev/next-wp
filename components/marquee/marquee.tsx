@@ -9,12 +9,12 @@ export async function LogoMarquee() {
   const items = bannerImages.length > 0
     ? bannerImages
     : [
-      { ID: 1, url: "/logos/application.svg", alt: "React", width: 200, height: 48 },
-      { ID: 2, url: "/logos/business.svg", alt: "Next.js", width: 200, height: 48 },
-      { ID: 3, url: "/logos/company.svg", alt: "TypeScript", width: 200, height: 48 },
-      { ID: 4, url: "/logos/startup.svg", alt: "Node.js", width: 200, height: 48 },
-      { ID: 5, url: "/logos/venture.svg", alt: "Tailwind", width: 200, height: 48 },
-      { ID: 6, url: "/logos/agency.svg", alt: "Vercel", width: 200, height: 48 },
+      { ID: 1, url: "/logos/application.svg", alt: "React", title: "React", width: 200, height: 48 },
+      { ID: 2, url: "/logos/business.svg", alt: "Next.js", title: "Next.js", width: 200, height: 48 },
+      { ID: 3, url: "/logos/company.svg", alt: "TypeScript", title: "TypeScript", width: 200, height: 48 },
+      { ID: 4, url: "/logos/startup.svg", alt: "Node.js", title: "Node.js", width: 200, height: 48 },
+      { ID: 5, url: "/logos/venture.svg", alt: "Tailwind", title: "Tailwind", width: 200, height: 48 },
+      { ID: 6, url: "/logos/agency.svg", alt: "Vercel", title: "Vercel", width: 200, height: 48 },
     ];
 
   return (
