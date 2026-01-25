@@ -104,7 +104,7 @@ export function ContactForm() {
                         <div className="bg-[#FF6B7A] border-[3px] border-black rounded-[24px] p-6 text-center text-white">
                             <User className="w-10 h-10 mx-auto mb-3" />
                             <h3 className="text-[20px] font-bold mb-2">Call Us</h3>
-                            <p className="text-[16px] font-medium">+1 (555) 123-4567</p>
+                            <p className="text-[16px] font-medium">+27 (082) 364 5883</p>
                         </div>
 
                         <div className="bg-[#2F81F7] border-[3px] border-black rounded-[24px] p-6 text-center text-white">
