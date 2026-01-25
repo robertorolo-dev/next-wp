@@ -112,6 +112,10 @@ export async function POST(request: NextRequest) {
           revalidateTag(`posts-author-${contentId}`, { expire: 0 });
           revalidateTag(`author-${contentId}`, { expire: 0 });
         }
+      } else if (contentType === "options" || contentType === "site-options") {
+        // Revalidate site options (e.g., banner images)
+        revalidateTag("site-options", { expire: 0 });
+        console.log("Site options revalidated");
       }
 
       // Also revalidate the entire layout for safety

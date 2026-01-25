@@ -260,6 +260,36 @@ export interface Portfolio extends WPEntity {
   meta: Record<string, unknown>;
 }
 
+// Site Options (ACF Options Page)
+export interface SiteOptions {
+  banner_images?: Array<{
+    ID: number;
+    id: number;
+    title: string;
+    filename: string;
+    filesize: number;
+    url: string;
+    link: string;
+    alt: string;
+    author: string;
+    description: string;
+    caption: string;
+    name: string;
+    status: string;
+    uploaded_to: number;
+    date: string;
+    modified: string;
+    menu_order: number;
+    mime_type: string;
+    type: string;
+    subtype: string;
+    icon: string;
+    width: number;
+    height: number;
+    sizes: Record<string, string | number>;
+  }>;
+}
+
 // Component Props Types
 export interface FilterBarProps {
   authors: Author[];

@@ -537,4 +537,15 @@ export async function getAllPortfolioSlugs(): Promise<{ slug: string }[]> {
   }
 }
 
+// Site Options Functions
+// Note: Requires custom REST API endpoint in WordPress (see .wordpress-setup/acf-site-options-endpoint.php)
+export async function getSiteOptions(): Promise<import("./wordpress.d").SiteOptions> {
+  return wordpressFetchGraceful<import("./wordpress.d").SiteOptions>(
+    "/wp-json/custom/v1/site-options",
+    {},
+    undefined,
+    ["wordpress", "site-options"]
+  );
+}
+
 export { WordPressAPIError };
