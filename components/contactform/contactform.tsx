@@ -163,23 +163,34 @@ export function ContactForm() {
                     </div>
 
                     <div className="mt-12 grid md:grid-cols-3 gap-6">
-                        <div className="bg-[#FFC224] border-[3px] border-black rounded-[24px] p-6 text-center">
+                        <a
+                            href="mailto:hello@kumocode.com"
+                            className="bg-[#FFC224] border-[3px] border-black rounded-[24px] p-6 text-center block hover:brightness-90 transition-all cursor-pointer"
+                        >
                             <Mail className="w-10 h-10 mx-auto mb-3" />
                             <h3 className="text-[20px] font-bold mb-2">Email Us</h3>
-                            <p className="text-[16px] font-medium">hello@kumocode.com</p>
-                        </div>
+                            <p className="text-[16px] font-medium">Click here to email us</p>
+                        </a>
 
-                        <div className="bg-[#FF6B7A] border-[3px] border-black rounded-[24px] p-6 text-center text-white">
+                        <a
+                            href="tel:+27823645883"
+                            className="bg-[#FF6B7A] border-[3px] border-black rounded-[24px] p-6 text-center text-white block hover:brightness-90 transition-all cursor-pointer"
+                        >
                             <User className="w-10 h-10 mx-auto mb-3" />
                             <h3 className="text-[20px] font-bold mb-2">Call Us</h3>
-                            <p className="text-[16px] font-medium">+27 (082) 364 5883</p>
-                        </div>
+                            <p className="text-[16px] font-medium">Click here to call us</p>
+                        </a>
 
-                        <div className="bg-[#2F81F7] border-[3px] border-black rounded-[24px] p-6 text-center text-white">
+                        <a
+                            href="https://wa.me/27823645883?text=Hi%20there!%20I'm%20interested%20in%20discussing%20a%20project%20with%20you."
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-[#25d366] border-[3px] border-black rounded-[24px] p-6 text-center text-white block hover:brightness-90 transition-all cursor-pointer"
+                        >
                             <MessageSquare className="w-10 h-10 mx-auto mb-3" />
-                            <h3 className="text-[20px] font-bold mb-2">Live Chat</h3>
-                            <p className="text-[16px] font-medium">Available 9am-6pm EST</p>
-                        </div>
+                            <h3 className="text-[20px] font-bold mb-2">Whatsapp Chat</h3>
+                            <p className="text-[16px] font-medium">Click to chat on Whatsapp</p>
+                        </a>
                     </div>
                 </div>
             </div>
