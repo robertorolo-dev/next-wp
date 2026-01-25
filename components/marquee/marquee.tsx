@@ -18,18 +18,23 @@ export async function LogoMarquee() {
     ];
 
   return (
-    <div className="overflow-hidden">
-      <div className="relative overflow-hidden bg-black py-16">
-        <div className="flex items-center gap-16 animate-marquee whitespace-nowrap">
-          {[...items, ...items, ...items, ...items].map((item, index) => (
-            <Image
-              key={`${item.ID}-${index}`}
-              src={item.url || "/placeholder.svg"}
-              alt={item.alt || item.title || "Banner image"}
-              width={item.width || 200}
-              height={item.height || 48}
-              className="h-12 w-auto object-contain"
-            />
+    <div className="overflow-hidden bg-black py-16">
+      <div className="relative flex">
+        <div className="flex animate-marquee shrink-0">
+          {/* Render 4 identical sets to ensure enough content for wide screens */}
+          {[0, 1, 2, 3].map((setIndex) => (
+            <div key={setIndex} className="flex items-center gap-16 pr-16 shrink-0">
+              {items.map((item, index) => (
+                <Image
+                  key={`set${setIndex}-${item.ID}-${index}`}
+                  src={item.url || "/placeholder.svg"}
+                  alt={item.alt || item.title || "Banner image"}
+                  width={item.width || 200}
+                  height={item.height || 48}
+                  className="h-12 w-auto object-contain"
+                />
+              ))}
+            </div>
           ))}
         </div>
       </div>
