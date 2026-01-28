@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { getAllPosts } from "@/lib/wordpress"
 import type { Post } from "@/lib/wordpress.d"
+import { stripHtml } from "@/lib/utils"
 
 // Helper function to get embedded data
 function getEmbeddedAuthor(post: any) {
@@ -23,11 +24,6 @@ function getEmbeddedCategories(post: any) {
 function formatDate(dateString: string) {
     const date = new Date(dateString)
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-}
-
-// Helper to strip HTML tags from excerpt
-function stripHtml(html: string) {
-    return html.replace(/<[^>]*>/g, '').trim()
 }
 
 export async function ArticlesSection() {
@@ -103,7 +99,7 @@ export async function ArticlesSection() {
                                 </div>
                                 <div className="p-6 md:p-8">
                                     <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
-                                        {featuredPost.title.rendered}
+                                        {stripHtml(featuredPost.title.rendered)}
                                     </h3>
                                     <div className="flex items-center gap-3 md:gap-4">
                                         {getEmbeddedAuthor(featuredPost) && (
@@ -168,7 +164,7 @@ export async function ArticlesSection() {
                                         {/* Content area */}
                                         <div className="p-6 md:p-10 flex flex-col justify-center">
                                             <h3 className="text-lg md:text-2xl font-bold mb-3 md:mb-4">
-                                                {post.title.rendered}
+                                                {stripHtml(post.title.rendered)}
                                             </h3>
                                             <p className="text-gray-600 text-sm md:text-lg leading-relaxed line-clamp-2">
                                                 {stripHtml(post.excerpt.rendered)}

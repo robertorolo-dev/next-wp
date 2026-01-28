@@ -4,8 +4,7 @@ import {
 } from "@/lib/wordpress";
 
 import { Section, Container, Article, Prose } from "@/components/craft";
-import { badgeVariants } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { cn, stripHtml } from "@/lib/utils";
 import { siteConfig } from "@/site.config";
 
 import Link from "next/link";
@@ -30,17 +29,18 @@ export async function generateMetadata({
         return {};
     }
 
+    const title = stripHtml(item.title.rendered);
+    const description = item.acf?.project_description || stripHtml(item.excerpt.rendered);
+
     const ogUrl = new URL(`${siteConfig.site_domain}/api/og`);
-    ogUrl.searchParams.append("title", item.title.rendered);
-    // Strip HTML tags for description
-    const description = item.excerpt.rendered.replace(/<[^>]*>/g, "").trim();
+    ogUrl.searchParams.append("title", title);
     ogUrl.searchParams.append("description", description);
 
     return {
-        title: item.title.rendered,
+        title: title,
         description: description,
         openGraph: {
-            title: item.title.rendered,
+            title: title,
             description: description,
             type: "article",
             url: `${siteConfig.site_domain}/portfolio/${item.slug}`,
@@ -49,13 +49,13 @@ export async function generateMetadata({
                     url: ogUrl.toString(),
                     width: 1200,
                     height: 630,
-                    alt: item.title.rendered,
+                    alt: title,
                 },
             ],
         },
         twitter: {
             card: "summary_large_image",
-            title: item.title.rendered,
+            title: title,
             description: description,
             images: [ogUrl.toString()],
         },
@@ -74,12 +74,6 @@ export default async function Page({
         notFound();
     }
 
-    const date = new Date(item.date).toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-    });
-
     // Get ACF fields
     const tag = item.acf?.project_tag || "Design";
     const logo = item.acf?.project_logo?.url;
@@ -94,167 +88,165 @@ export default async function Page({
 
     return (
         <Section>
-            <Container>
-                <div className="mb-8">
+            <Container className="max-w-[1600px] mx-auto">
+                <div className="mb-12">
                     <Link
                         href="/portfolio"
-                        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-black transition-colors uppercase tracking-widest"
                     >
                         <ArrowLeft className="w-4 h-4" />
-                        Back to Portfolio
+                        Explore More Projects
                     </Link>
                 </div>
 
-                <Prose>
-                    <h1>
-                        <span
-                            dangerouslySetInnerHTML={{ __html: item.title.rendered }}
-                        ></span>
-                    </h1>
-                    <div className="flex justify-between items-center gap-4 text-sm mb-4">
-                        <h5>Published {date}</h5>
-
-                        <span
-                            className={cn(
-                                badgeVariants({ variant: "outline" }),
-                                "no-underline!"
+                <div className="space-y-12">
+                    {/* Project Header */}
+                    <div className="border-b-[3px] border-black pb-12">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                            <div className="flex-1">
+                                <span className="inline-block bg-[#FFC224] text-black text-xs font-bold px-4 py-1.5 rounded-full mb-6 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                                    {tag}
+                                </span>
+                                <h1 className="text-4xl md:text-6xl font-black leading-tight text-[#0B0B0B] mb-6">
+                                    {stripHtml(item.title.rendered)}
+                                </h1>
+                                <p className="text-xl text-[#393939] font-medium max-w-2xl leading-relaxed">
+                                    {item.acf?.project_description || stripHtml(item.excerpt.rendered)}
+                                </p>
+                            </div>
+                            {logo && (
+                                <div className="flex-shrink-0 bg-white p-6 border-[3px] border-black rounded-2xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                                    <Image
+                                        src={logo}
+                                        alt={`${item.title.rendered} logo`}
+                                        width={180}
+                                        height={50}
+                                        className="h-12 w-auto object-contain"
+                                    />
+                                </div>
                             )}
-                        >
-                            {tag}
-                        </span>
+                        </div>
                     </div>
 
-                    {logo && (
-                        <div className="flex items-center mb-8">
-                            <Image
-                                src={logo}
-                                alt={`${item.title.rendered} logo`}
-                                width={150}
-                                height={42}
-                                className="h-10 w-auto"
-                            />
-                        </div>
-                    )}
-
+                    {/* Main Banner */}
                     {illustration && (
                         <div className={cn(
-                            "h-96 my-12 md:h-[500px] overflow-hidden flex items-center justify-center border rounded-lg",
+                            "relative h-[300px] md:h-[600px] w-full overflow-hidden border-[3px] border-black rounded-[40px] shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]",
                             bgColor
                         )}>
                             <Image
                                 className="w-full h-full object-cover"
                                 src={illustration}
                                 alt={item.title.rendered}
-                                width={1200}
-                                height={600}
+                                fill
+                                priority
                             />
                         </div>
                     )}
 
-                    {caseStudyLink && (
-                        <div className="my-8">
-                            <a
-                                href={caseStudyLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-900 transition-colors"
-                            >
-                                View Full Case Study
-                                <ExternalLink className="w-4 h-4" />
-                            </a>
-                        </div>
-                    )}
-                </Prose>
+                    <div className="grid md:grid-cols-3 gap-12 pt-8">
+                        {/* Project Content */}
+                        <div className="md:col-span-2 space-y-8">
+                            <Prose className="max-w-none">
+                                <Article dangerouslySetInnerHTML={{ __html: item.content.rendered }} />
+                            </Prose>
 
-                <div className="grid md:grid-cols-3 gap-8 my-12">
-                    <div className="md:col-span-2">
-                        <Article dangerouslySetInnerHTML={{ __html: item.content.rendered }} />
+                            {caseStudyLink && (
+                                <div className="pt-8 text-center md:text-left">
+                                    <a
+                                        href={caseStudyLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-3 bg-black text-white px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-[6px_6px_0px_0px_rgba(253,185,39,1)] hover:-translate-y-1 transition-all"
+                                    >
+                                        Live Project Demo
+                                        <ExternalLink className="w-5 h-5" />
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Project Metadata Sidebar */}
+                        <aside className="md:col-span-1">
+                            <div className="border-[3px] border-black rounded-[32px] p-8 bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sticky top-24">
+                                <h3 className="text-2xl font-black mb-8 border-b-2 border-black pb-4 uppercase tracking-tight">Project Details</h3>
+                                <div className="space-y-8">
+                                    {clientName && (
+                                        <div>
+                                            <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Client</p>
+                                            <p className="text-xl font-bold text-[#0B0B0B]">{clientName}</p>
+                                        </div>
+                                    )}
+
+                                    {projectDate && (
+                                        <div>
+                                            <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Completion</p>
+                                            <p className="text-xl font-bold text-[#0B0B0B]">
+                                                {new Date(projectDate).toLocaleDateString("en-US", {
+                                                    month: "long",
+                                                    year: "numeric",
+                                                })}
+                                            </p>
+                                        </div>
+                                    )}
+
+                                    {technologies && (
+                                        <div>
+                                            <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Stack</p>
+                                            <div className="flex flex-wrap gap-2 mt-3">
+                                                {technologies.split(",").map((tech, index) => (
+                                                    <span
+                                                        key={index}
+                                                        className="bg-gray-100 text-black border-2 border-black px-3 py-1 rounded-lg text-xs font-bold"
+                                                    >
+                                                        {tech.trim()}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {projectUrl && (
+                                        <div className="pt-4">
+                                            <a
+                                                href={projectUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="group inline-flex items-center gap-2 text-[#0B0B0B] font-black hover:text-[#6366F1] transition-colors"
+                                            >
+                                                Visit Website
+                                                <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                                            </a>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </aside>
                     </div>
 
-                    {/* Project Metadata Sidebar */}
-                    <div className="md:col-span-1">
-                        <div className="border rounded-lg p-6 bg-accent/30 sticky top-24">
-                            <h3 className="text-lg font-semibold mb-4">Project Details</h3>
-                            <div className="space-y-4 text-sm">
-                                {clientName && (
-                                    <div>
-                                        <p className="text-muted-foreground font-medium mb-1">Client</p>
-                                        <p className="text-foreground">{clientName}</p>
+                    {/* Project Gallery */}
+                    {gallery && gallery.length > 0 && (
+                        <div className="py-20 border-t-[3px] border-black">
+                            <h2 className="text-4xl font-black mb-12 uppercase">Project <span className="text-[#6366F1]">Gallery</span></h2>
+                            <div className="grid md:grid-cols-2 gap-8">
+                                {gallery.map((image) => (
+                                    <div
+                                        key={image.ID}
+                                        className="relative h-[300px] md:h-[500px] overflow-hidden rounded-[32px] border-[3px] border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] group"
+                                    >
+                                        <Image
+                                            src={image.url}
+                                            alt={image.alt || item.title.rendered}
+                                            fill
+                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                            sizes="(max-width: 768px) 100vw, 50vw"
+                                        />
                                     </div>
-                                )}
-
-                                {projectDate && (
-                                    <div>
-                                        <p className="text-muted-foreground font-medium mb-1">Completion Date</p>
-                                        <p className="text-foreground">
-                                            {new Date(projectDate).toLocaleDateString("en-US", {
-                                                month: "long",
-                                                day: "numeric",
-                                                year: "numeric",
-                                            })}
-                                        </p>
-                                    </div>
-                                )}
-
-                                {technologies && (
-                                    <div>
-                                        <p className="text-muted-foreground font-medium mb-1">Technologies</p>
-                                        <div className="flex flex-wrap gap-2 mt-2">
-                                            {technologies.split(",").map((tech, index) => (
-                                                <span
-                                                    key={index}
-                                                    className="bg-black text-white px-3 py-1 rounded-full text-xs"
-                                                >
-                                                    {tech.trim()}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {projectUrl && (
-                                    <div>
-                                        <p className="text-muted-foreground font-medium mb-1">Live Project</p>
-                                        <a
-                                            href={projectUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-1 text-foreground hover:underline"
-                                        >
-                                            Visit Website
-                                            <ExternalLink className="w-3 h-3" />
-                                        </a>
-                                    </div>
-                                )}
+                                ))}
                             </div>
                         </div>
-                    </div>
+                    )}
                 </div>
-
-                {/* Project Gallery */}
-                {gallery && gallery.length > 0 && (
-                    <div className="my-12">
-                        <Prose>
-                            <h2>Project Gallery</h2>
-                        </Prose>
-                        <div className="grid md:grid-cols-2 gap-4 mt-6">
-                            {gallery.map((image) => (
-                                <div
-                                    key={image.ID}
-                                    className="relative h-64 md:h-80 overflow-hidden rounded-lg border"
-                                >
-                                    <Image
-                                        src={image.url}
-                                        alt={image.alt || item.title.rendered}
-                                        fill
-                                        className="object-cover hover:scale-105 transition-transform duration-300"
-                                        sizes="(max-width: 768px) 100vw, 50vw"
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
             </Container>
         </Section>
     );

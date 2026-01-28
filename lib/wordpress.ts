@@ -477,18 +477,44 @@ export async function getAllPortfolioItems(): Promise<Portfolio[]> {
   );
 }
 
+export async function getAllPortfolioCategories(): Promise<Category[]> {
+  return wordpressFetchGraceful<Category[]>(
+    "/wp-json/wp/v2/portfolio_category",
+    [],
+    undefined,
+    ["wordpress", "portfolio_category"]
+  );
+}
+
 export async function getPortfolioItemsPaginated(
   page: number = 1,
-  perPage: number = 9
+  perPage: number = 9,
+  filterParams?: {
+    category?: string;
+    search?: string;
+  }
 ): Promise<WordPressResponse<Portfolio[]>> {
+  const query: Record<string, any> = {
+    _embed: true,
+    per_page: perPage,
+    page,
+  };
+
+  const cacheTags = ["wordpress", "portfolio", `portfolio-page-${page}`];
+
+  if (filterParams?.search) {
+    query.search = filterParams.search;
+    cacheTags.push("portfolio-search");
+  }
+  if (filterParams?.category) {
+    query.portfolio_category = filterParams.category;
+    cacheTags.push(`portfolio-category-${filterParams.category}`);
+  }
+
   return wordpressFetchPaginatedGraceful<Portfolio>(
     "/wp-json/wp/v2/portfolio",
-    {
-      _embed: true,
-      per_page: perPage,
-      page,
-    },
-    ["wordpress", "portfolio", `portfolio-page-${page}`]
+    query,
+    cacheTags
   );
 }
 

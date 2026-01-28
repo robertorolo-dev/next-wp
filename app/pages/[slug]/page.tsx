@@ -2,6 +2,7 @@ import { getPageBySlug, getAllPages } from "@/lib/wordpress";
 import { Section, Container, Prose } from "@/components/craft";
 import { siteConfig } from "@/site.config";
 import { notFound } from "next/navigation";
+import { stripHtml } from "@/lib/utils";
 
 import type { Metadata } from "next";
 
@@ -28,22 +29,21 @@ export async function generateMetadata({
     return {};
   }
 
-  const ogUrl = new URL(`${siteConfig.site_domain}/api/og`);
-  ogUrl.searchParams.append("title", page.title.rendered);
+  const title = stripHtml(page.title.rendered);
   // Strip HTML tags for description and limit length
   const description = page.excerpt?.rendered
-    ? page.excerpt.rendered.replace(/<[^>]*>/g, "").trim()
-    : page.content.rendered
-        .replace(/<[^>]*>/g, "")
-        .trim()
-        .slice(0, 200) + "...";
+    ? stripHtml(page.excerpt.rendered)
+    : stripHtml(page.content.rendered).slice(0, 200) + "...";
+
+  const ogUrl = new URL(`${siteConfig.site_domain}/api/og`);
+  ogUrl.searchParams.append("title", title);
   ogUrl.searchParams.append("description", description);
 
   return {
-    title: page.title.rendered,
+    title: title,
     description: description,
     openGraph: {
-      title: page.title.rendered,
+      title: title,
       description: description,
       type: "article",
       url: `${siteConfig.site_domain}/pages/${page.slug}`,
@@ -52,13 +52,13 @@ export async function generateMetadata({
           url: ogUrl.toString(),
           width: 1200,
           height: 630,
-          alt: page.title.rendered,
+          alt: title,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: page.title.rendered,
+      title: title,
       description: description,
       images: [ogUrl.toString()],
     },
@@ -81,7 +81,7 @@ export default async function Page({
     <Section>
       <Container>
         <Prose>
-          <h2>{page.title.rendered}</h2>
+          <h2>{stripHtml(page.title.rendered)}</h2>
           <div dangerouslySetInnerHTML={{ __html: page.content.rendered }} />
         </Prose>
       </Container>

@@ -227,6 +227,7 @@ export interface Portfolio extends WPEntity {
   template: string;
   acf?: {
     project_tag?: string;
+    project_description?: string;
     project_logo?: {
       ID: number;
       url: string;

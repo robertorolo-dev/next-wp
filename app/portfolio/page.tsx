@@ -1,5 +1,6 @@
 import {
     getPortfolioItemsPaginated,
+    getAllPortfolioCategories,
 } from "@/lib/wordpress";
 
 import {
@@ -13,6 +14,8 @@ import {
 
 import { Section, Container, Prose } from "@/components/craft";
 import { PortfolioCard } from "@/components/portfolio/portfolio-card";
+import { FilterPortfolio } from "@/components/portfolio/filter";
+import { PortfolioSearchInput } from "@/components/portfolio/search-input";
 
 import type { Metadata } from "next";
 
@@ -29,17 +32,22 @@ export default async function Page({
 }: {
     searchParams: Promise<{
         page?: string;
+        category?: string;
+        search?: string;
     }>;
 }) {
     const params = await searchParams;
-    const { page: pageParam } = params;
+    const { page: pageParam, category, search } = params;
 
     // Handle pagination
     const page = pageParam ? parseInt(pageParam, 10) : 1;
     const itemsPerPage = 9;
 
-    // Fetch portfolio items with pagination
-    const portfolioResponse = await getPortfolioItemsPaginated(page, itemsPerPage);
+    // Fetch data based on search parameters
+    const [portfolioResponse, categories] = await Promise.all([
+        getPortfolioItemsPaginated(page, itemsPerPage, { category, search }),
+        getAllPortfolioCategories(),
+    ]);
 
     const { data: portfolioItems, headers } = portfolioResponse;
     const { total, totalPages } = headers;
@@ -48,24 +56,35 @@ export default async function Page({
     const createPaginationUrl = (newPage: number) => {
         const params = new URLSearchParams();
         if (newPage > 1) params.set("page", newPage.toString());
+        if (category) params.set("category", category);
+        if (search) params.set("search", search);
         return `/portfolio${params.toString() ? `?${params.toString()}` : ""}`;
     };
 
     return (
         <Section>
-            <Container>
+            <Container className="max-w-[1600px] mx-auto">
                 <div className="space-y-8">
                     <Prose>
                         <h2>Portfolio</h2>
                         <p className="text-muted-foreground">
-                            {total} {total === 1 ? "project" : "projects"} in our portfolio
+                            {total} {total === 1 ? "project" : "projects"} found
+                            {search && " matching your search"}
                         </p>
                     </Prose>
 
+                    <div className="space-y-4">
+                        <PortfolioSearchInput defaultValue={search} />
+                        <FilterPortfolio
+                            categories={categories}
+                            selectedCategory={category}
+                        />
+                    </div>
+
                     {portfolioItems.length > 0 ? (
-                        <div className="grid md:grid-cols-3 gap-4">
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {portfolioItems.map((item) => (
-                                <PortfolioCard key={item.id} item={item} />
+                                <PortfolioCard key={item.id} item={item} layout="vertical" />
                             ))}
                         </div>
                     ) : (
