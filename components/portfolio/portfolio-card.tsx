@@ -24,14 +24,15 @@ export async function PortfolioCard({
     const caseStudyLink = `/portfolio/${item.slug}`;
 
     const containerClasses = cn(
-        "group bg-white border-[3px] border-black rounded-[32px] overflow-hidden hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col",
+        "group border-[3px] border-black rounded-[32px] overflow-hidden hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col",
+        bgColor,
         layout === "horizontal" ? "md:grid md:grid-cols-2" : ""
     );
 
     return (
         <div className={containerClasses}>
             <div className={cn(
-                "p-6 flex flex-col justify-center bg-white",
+                "p-6 flex flex-col justify-center relative z-10 bg-white/40 backdrop-blur-[2px]",
                 layout === "horizontal" ? "md:p-12" : "md:p-8"
             )}>
                 {logo && (
@@ -75,7 +76,6 @@ export async function PortfolioCard({
 
             <div className={cn(
                 "relative overflow-hidden",
-                bgColor,
                 layout === "vertical" ? "h-64 order-first" : "min-h-[250px] md:min-h-[500px]"
             )}>
                 {illustration ? (
