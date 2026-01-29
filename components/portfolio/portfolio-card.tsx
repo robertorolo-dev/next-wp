@@ -18,7 +18,6 @@ export async function PortfolioCard({
         : "No description available");
 
     const tag = item.acf?.project_tag || "Design";
-    const logo = item.acf?.project_logo?.url;
     const bgColor = item.acf?.background_color || "bg-[#6366F1]";
     const illustration = item.acf?.project_illustration?.url;
     const caseStudyLink = `/portfolio/${item.slug}`;
@@ -35,28 +34,16 @@ export async function PortfolioCard({
                 "p-6 flex flex-col justify-center relative z-10 bg-white/40 backdrop-blur-[2px]",
                 layout === "horizontal" ? "md:p-12" : "md:p-8"
             )}>
-                {logo && (
-                    <div className="flex items-center gap-3 mb-6">
-                        <Image
-                            src={logo}
-                            alt={`${title} logo`}
-                            width={120}
-                            height={32}
-                            className="h-6 md:h-8 w-auto"
-                        />
-                    </div>
-                )}
-
-                <span className="inline-block bg-black text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 w-fit">
-                    {tag}
-                </span>
-
                 <h3 className={cn(
                     "font-bold mb-4 leading-tight text-[#0B0B0B]",
                     layout === "vertical" ? "text-xl md:text-2xl" : "text-xl md:text-[28px] md:leading-[40px]"
                 )}>
                     {title}
                 </h3>
+
+                <span className="inline-block bg-black text-white text-xs font-semibold px-4 py-1.5 rounded-full mb-6 w-fit">
+                    {tag}
+                </span>
 
                 <p className={cn(
                     "text-[#393939] mb-8 leading-relaxed font-medium",
