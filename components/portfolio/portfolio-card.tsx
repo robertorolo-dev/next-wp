@@ -39,7 +39,7 @@ export async function PortfolioCard({
     return (
         <div className={containerClasses} style={containerStyle}>
             <div className={cn(
-                "p-6 flex flex-col justify-center relative z-10 bg-white/40 backdrop-blur-[2px]",
+                "p-6 flex flex-col justify-center relative z-10 bg-white/40 backdrop-blur-[2px] flex-1",
                 layout === "horizontal" ? "md:p-12" : "md:p-8"
             )}>
                 <h3 className={cn(
@@ -70,7 +70,7 @@ export async function PortfolioCard({
             </div>
 
             <div className={cn(
-                "relative overflow-hidden",
+                "relative overflow-hidden flex-shrink-0",
                 layout === "vertical" ? "h-64 order-first" : "min-h-[250px] md:min-h-[500px]"
             )}>
                 {illustration ? (
