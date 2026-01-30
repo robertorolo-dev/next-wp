@@ -18,18 +18,26 @@ export async function PortfolioCard({
         : "No description available");
 
     const tag = item.acf?.project_tag || "Design";
-    const bgColor = item.acf?.background_color || "bg-[#6366F1]";
+    const backgroundInput = item.acf?.background_color || "bg-[#6366F1]";
+
+    // Support dynamic hex colors from CMS (Tailwind classes like bg-[#fff] aren't pre-compiled)
+    const hexMatch = backgroundInput.match(/\[?(#[a-fA-F0-9]{3,8})\]?/i);
+    const hexColor = hexMatch ? hexMatch[1] : null;
+
+    const containerStyle = hexColor ? { backgroundColor: hexColor } : {};
+    const bgColorClass = hexColor ? "" : backgroundInput;
+
     const illustration = item.acf?.project_illustration?.url;
     const caseStudyLink = `/portfolio/${item.slug}`;
 
     const containerClasses = cn(
         "group border-[3px] border-black rounded-[32px] overflow-hidden hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col",
-        bgColor,
+        bgColorClass,
         layout === "horizontal" ? "md:grid md:grid-cols-2" : ""
     );
 
     return (
-        <div className={containerClasses}>
+        <div className={containerClasses} style={containerStyle}>
             <div className={cn(
                 "p-6 flex flex-col justify-center relative z-10 bg-white/40 backdrop-blur-[2px]",
                 layout === "horizontal" ? "md:p-12" : "md:p-8"
