@@ -34,6 +34,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { BackToTop } from "@/components/back-to-top";
+
 export default function RootLayout({
   children,
 }: {
@@ -61,6 +63,7 @@ export default function RootLayout({
         >
           <Nav />
           {children}
+          <BackToTop />
           <Footer />
         </ThemeProvider>
         <Analytics />
