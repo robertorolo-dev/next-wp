@@ -1,11 +1,12 @@
 import { MetadataRoute } from "next";
-import { getAllPosts, getAllPortfolioItems } from "@/lib/wordpress";
+import { getAllPosts, getAllPortfolioItems, getAllPages } from "@/lib/wordpress";
 import { siteConfig } from "@/site.config";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [posts, portfolioItems] = await Promise.all([
+  const [posts, portfolioItems, pages] = await Promise.all([
     getAllPosts(),
-    getAllPortfolioItems()
+    getAllPortfolioItems(),
+    getAllPages()
   ]);
 
   const staticUrls: MetadataRoute.Sitemap = [
@@ -67,5 +68,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticUrls, ...postUrls, ...portfolioUrls];
+  const pageUrls: MetadataRoute.Sitemap = pages.map((page) => ({
+    url: `${siteConfig.site_domain}/${page.slug}`,
+    lastModified: new Date(page.modified),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticUrls, ...postUrls, ...portfolioUrls, ...pageUrls];
 }
