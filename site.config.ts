@@ -6,6 +6,6 @@ type SiteConfig = {
 
 export const siteConfig: SiteConfig = {
   site_name: "Kumocode",
-  site_description: "South African web development company building fast, secure, SEO-friendly websites and custom digital solutions for growing businesses.",
+  site_description: "Kumocode builds high-performance, SEO-friendly websites and custom digital solutions designed to help South African businesses scale. Fast, secure, and built for growth.",
   site_domain: "https://kumocode.co.za",
 };
