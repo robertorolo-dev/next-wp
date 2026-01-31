@@ -24,15 +24,23 @@ const font = FontSans({
   variable: "--font-sans",
 });
 
+import { defaultSeoConfig } from "@/lib/seo-config";
+
 export const metadata: Metadata = {
-  title: "Kumocode | High-Performance Web Development South Africa",
-  description:
-    "South African web development company building fast, secure, SEO-friendly websites and custom digital solutions for growing businesses.",
   metadataBase: new URL(siteConfig.site_domain),
+  title: {
+    default: defaultSeoConfig.defaultTitle,
+    template: defaultSeoConfig.titleTemplate,
+  },
+  description: defaultSeoConfig.description,
+  openGraph: defaultSeoConfig.openGraph,
+  twitter: defaultSeoConfig.twitter,
   alternates: {
     canonical: "/",
   },
 };
+
+import { OrganizationJsonLd } from "next-seo";
 
 import { BackToTop } from "@/components/back-to-top";
 
@@ -61,6 +69,11 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <OrganizationJsonLd
+            url={siteConfig.site_domain}
+            logo={`${siteConfig.site_domain}/kumocode.png`}
+            name={siteConfig.site_name}
+          />
           <Nav />
           {children}
           <BackToTop />

@@ -18,11 +18,16 @@ import { FilterPortfolio } from "@/components/portfolio/filter";
 import { PortfolioSearchInput } from "@/components/portfolio/search-input";
 
 import type { Metadata } from "next";
+import { getMetadata } from "@/lib/seo";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
+import { BreadcrumbJsonLd } from "next-seo";
+import { siteConfig } from "@/site.config";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = getMetadata(undefined, {
     title: "Portfolio",
-    description: "Browse all our portfolio projects",
-};
+    description: "Browse our latest projects and web development work.",
+    path: "/portfolio",
+});
 
 export const dynamic = "auto";
 export const revalidate = 600;
@@ -62,87 +67,108 @@ export default async function Page({
     };
 
     return (
-        <Section>
-            <Container className="max-w-[1600px] mx-auto">
-                <div className="space-y-8">
-                    <Prose>
-                        <h2>Portfolio</h2>
-                        <p className="text-muted-foreground">
-                            {total} {total === 1 ? "project" : "projects"} found
-                            {search && " matching your search"}
-                        </p>
-                    </Prose>
-
-                    <div className="space-y-4">
-                        <PortfolioSearchInput defaultValue={search} />
-                        <FilterPortfolio
-                            categories={categories}
-                            selectedCategory={category}
+        <>
+            <BreadcrumbJsonLd
+                items={[
+                    {
+                        name: "Home",
+                        item: siteConfig.site_domain,
+                    },
+                    {
+                        name: "Portfolio",
+                        item: `${siteConfig.site_domain}/portfolio`,
+                    },
+                ]}
+            />
+            <Section>
+                <Container className="max-w-[1600px] mx-auto">
+                    <div className="mb-12">
+                        <Breadcrumbs
+                            items={[
+                                { label: "Portfolio", active: true },
+                            ]}
                         />
                     </div>
+                    <div className="space-y-8">
+                        <Prose>
+                            <h2>Portfolio</h2>
+                            <p className="text-muted-foreground">
+                                {total} {total === 1 ? "project" : "projects"} found
+                                {search && " matching your search"}
+                            </p>
+                        </Prose>
 
-                    {portfolioItems.length > 0 ? (
-                        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
-                            {portfolioItems.map((item) => (
-                                <PortfolioCard key={item.id} item={item} layout="vertical" />
-                            ))}
+                        <div className="space-y-4">
+                            <PortfolioSearchInput defaultValue={search} />
+                            <FilterPortfolio
+                                categories={categories}
+                                selectedCategory={category}
+                            />
                         </div>
-                    ) : (
-                        <div className="h-24 w-full border rounded-lg bg-accent/25 flex items-center justify-center">
-                            <p>No portfolio items found</p>
-                        </div>
-                    )}
 
-                    {totalPages > 1 && (
-                        <div className="flex justify-center items-center py-8">
-                            <Pagination>
-                                <PaginationContent>
-                                    {page > 1 && (
-                                        <PaginationItem>
-                                            <PaginationPrevious
-                                                href={createPaginationUrl(page - 1)}
-                                            />
-                                        </PaginationItem>
-                                    )}
+                        {portfolioItems.length > 0 ? (
+                            <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-6">
+                                {portfolioItems.map((item) => (
+                                    <PortfolioCard key={item.id} item={item} layout="vertical" />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="h-24 w-full border rounded-lg bg-accent/25 flex items-center justify-center">
+                                <p>No portfolio items found</p>
+                            </div>
+                        )}
 
-                                    {Array.from({ length: totalPages }, (_, i) => i + 1)
-                                        .filter((pageNum) => {
-                                            // Show current page, first page, last page, and 2 pages around current
-                                            return (
-                                                pageNum === 1 ||
-                                                pageNum === totalPages ||
-                                                Math.abs(pageNum - page) <= 1
-                                            );
-                                        })
-                                        .map((pageNum, index, array) => {
-                                            const showEllipsis =
-                                                index > 0 && pageNum - array[index - 1] > 1;
-                                            return (
-                                                <div key={pageNum} className="flex items-center">
-                                                    {showEllipsis && <span className="px-2">...</span>}
-                                                    <PaginationItem>
-                                                        <PaginationLink
-                                                            href={createPaginationUrl(pageNum)}
-                                                            isActive={pageNum === page}
-                                                        >
-                                                            {pageNum}
-                                                        </PaginationLink>
-                                                    </PaginationItem>
-                                                </div>
-                                            );
-                                        })}
+                        {totalPages > 1 && (
+                            <div className="flex justify-center items-center py-8">
+                                <Pagination>
+                                    <PaginationContent>
+                                        {page > 1 && (
+                                            <PaginationItem>
+                                                <PaginationPrevious
+                                                    href={createPaginationUrl(page - 1)}
+                                                />
+                                            </PaginationItem>
+                                        )}
 
-                                    {page < totalPages && (
-                                        <PaginationItem>
-                                            <PaginationNext href={createPaginationUrl(page + 1)} />
-                                        </PaginationItem>
-                                    )}
-                                </PaginationContent>
-                            </Pagination>
-                        </div>
-                    )}
-                </div>
-            </Container>
-        </Section>
+                                        {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                            .filter((pageNum) => {
+                                                // Show current page, first page, last page, and 2 pages around current
+                                                return (
+                                                    pageNum === 1 ||
+                                                    pageNum === totalPages ||
+                                                    Math.abs(pageNum - page) <= 1
+                                                );
+                                            })
+                                            .map((pageNum, index, array) => {
+                                                const showEllipsis =
+                                                    index > 0 && pageNum - array[index - 1] > 1;
+                                                return (
+                                                    <div key={pageNum} className="flex items-center">
+                                                        {showEllipsis && <span className="px-2">...</span>}
+                                                        <PaginationItem>
+                                                            <PaginationLink
+                                                                href={createPaginationUrl(pageNum)}
+                                                                isActive={pageNum === page}
+                                                            >
+                                                                {pageNum}
+                                                            </PaginationLink>
+                                                        </PaginationItem>
+                                                    </div>
+                                                );
+                                            })}
+
+                                        {page < totalPages && (
+                                            <PaginationItem>
+                                                <PaginationNext href={createPaginationUrl(page + 1)} />
+                                            </PaginationItem>
+                                        )}
+                                    </PaginationContent>
+                                </Pagination>
+                            </div>
+                        )}
+                    </div>
+                </Container>
+            </Section>
+        </>
     );
 }

@@ -23,11 +23,16 @@ import { FilterPosts } from "@/components/posts/filter";
 import { SearchInput } from "@/components/posts/search-input";
 
 import type { Metadata } from "next";
+import { getMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "next-seo";
+import { siteConfig } from "@/site.config";
+import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
-export const metadata: Metadata = {
-  title: "Blog Posts",
-  description: "Browse all our blog posts",
-};
+export const metadata: Metadata = getMetadata(undefined, {
+  title: "Blog",
+  description: "Read our latest news and articles on web development.",
+  path: "/posts",
+});
 
 export const dynamic = "auto";
 export const revalidate = 600;
@@ -73,92 +78,113 @@ export default async function Page({
   };
 
   return (
-    <Section>
-      <Container className="max-w-[1400px] mx-auto">
-        <div className="space-y-8">
-          <Prose>
-            <h2>All Posts</h2>
-            <p className="text-muted-foreground">
-              {total} {total === 1 ? "post" : "posts"} found
-              {search && " matching your search"}
-            </p>
-          </Prose>
-
-          <div className="space-y-4">
-            <SearchInput defaultValue={search} />
-
-            <FilterPosts
-              authors={authors}
-              tags={tags}
-              categories={categories}
-              selectedAuthor={author}
-              selectedTag={tag}
-              selectedCategory={category}
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          {
+            name: "Home",
+            item: siteConfig.site_domain,
+          },
+          {
+            name: "Blog",
+            item: `${siteConfig.site_domain}/posts`,
+          },
+        ]}
+      />
+      <Section>
+        <Container className="max-w-[1400px] mx-auto">
+          <div className="mb-12">
+            <Breadcrumbs
+              items={[
+                { label: "Blog", active: true },
+              ]}
             />
           </div>
+          <div className="space-y-8">
+            <Prose>
+              <h2>All Posts</h2>
+              <p className="text-muted-foreground">
+                {total} {total === 1 ? "post" : "posts"} found
+                {search && " matching your search"}
+              </p>
+            </Prose>
 
-          {posts.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((post) => (
-                <PostCard key={post.id} post={post} />
-              ))}
+            <div className="space-y-4">
+              <SearchInput defaultValue={search} />
+
+              <FilterPosts
+                authors={authors}
+                tags={tags}
+                categories={categories}
+                selectedAuthor={author}
+                selectedTag={tag}
+                selectedCategory={category}
+              />
             </div>
-          ) : (
-            <div className="h-24 w-full border rounded-lg bg-accent/25 flex items-center justify-center">
-              <p>No posts found</p>
-            </div>
-          )}
 
-          {totalPages > 1 && (
-            <div className="flex justify-center items-center py-8">
-              <Pagination>
-                <PaginationContent>
-                  {page > 1 && (
-                    <PaginationItem>
-                      <PaginationPrevious
-                        href={createPaginationUrl(page - 1)}
-                      />
-                    </PaginationItem>
-                  )}
+            {posts.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {posts.map((post) => (
+                  <PostCard key={post.id} post={post} />
+                ))}
+              </div>
+            ) : (
+              <div className="h-24 w-full border rounded-lg bg-accent/25 flex items-center justify-center">
+                <p>No posts found</p>
+              </div>
+            )}
 
-                  {Array.from({ length: totalPages }, (_, i) => i + 1)
-                    .filter((pageNum) => {
-                      // Show current page, first page, last page, and 2 pages around current
-                      return (
-                        pageNum === 1 ||
-                        pageNum === totalPages ||
-                        Math.abs(pageNum - page) <= 1
-                      );
-                    })
-                    .map((pageNum, index, array) => {
-                      const showEllipsis =
-                        index > 0 && pageNum - array[index - 1] > 1;
-                      return (
-                        <div key={pageNum} className="flex items-center">
-                          {showEllipsis && <span className="px-2">...</span>}
-                          <PaginationItem>
-                            <PaginationLink
-                              href={createPaginationUrl(pageNum)}
-                              isActive={pageNum === page}
-                            >
-                              {pageNum}
-                            </PaginationLink>
-                          </PaginationItem>
-                        </div>
-                      );
-                    })}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center py-8">
+                <Pagination>
+                  <PaginationContent>
+                    {page > 1 && (
+                      <PaginationItem>
+                        <PaginationPrevious
+                          href={createPaginationUrl(page - 1)}
+                        />
+                      </PaginationItem>
+                    )}
 
-                  {page < totalPages && (
-                    <PaginationItem>
-                      <PaginationNext href={createPaginationUrl(page + 1)} />
-                    </PaginationItem>
-                  )}
-                </PaginationContent>
-              </Pagination>
-            </div>
-          )}
-        </div>
-      </Container>
-    </Section>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter((pageNum) => {
+                        // Show current page, first page, last page, and 2 pages around current
+                        return (
+                          pageNum === 1 ||
+                          pageNum === totalPages ||
+                          Math.abs(pageNum - page) <= 1
+                        );
+                      })
+                      .map((pageNum, index, array) => {
+                        const showEllipsis =
+                          index > 0 && pageNum - array[index - 1] > 1;
+                        return (
+                          <div key={pageNum} className="flex items-center">
+                            {showEllipsis && <span className="px-2">...</span>}
+                            <PaginationItem>
+                              <PaginationLink
+                                href={createPaginationUrl(pageNum)}
+                                isActive={pageNum === page}
+                              >
+                                {pageNum}
+                              </PaginationLink>
+                            </PaginationItem>
+                          </div>
+                        );
+                      })}
+
+                    {page < totalPages && (
+                      <PaginationItem>
+                        <PaginationNext href={createPaginationUrl(page + 1)} />
+                      </PaginationItem>
+                    )}
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
+          </div>
+        </Container>
+      </Section>
+    </>
   );
 }
