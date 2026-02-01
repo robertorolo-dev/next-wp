@@ -1,28 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Post } from "@/lib/wordpress.d";
-import { cn, stripHtml } from "@/lib/utils";
+import { stripHtml } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 
-import {
-  getFeaturedMediaById,
-  getCategoryById,
-} from "@/lib/wordpress";
-
-export async function PostCard({ post }: { post: Post }) {
-  const media = post.featured_media
-    ? await getFeaturedMediaById(post.featured_media)
-    : null;
+export function PostCard({ post }: { post: any }) {
+  // Use embedded data to avoid extra API requests
+  const media = post._embedded?.["wp:featuredmedia"]?.[0];
+  const category = post._embedded?.["wp:term"]?.[0]?.[0];
 
   const date = new Date(post.date).toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
   });
-
-  const category = post.categories?.[0]
-    ? await getCategoryById(post.categories[0])
-    : null;
 
   const title = stripHtml(post.title?.rendered || "Untitled Post");
   const excerpt = post.excerpt?.rendered

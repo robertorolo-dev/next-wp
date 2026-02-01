@@ -473,32 +473,32 @@ export async function getAllPortfolioItems(params?: { per_page?: number }): Prom
   return wordpressFetchGraceful<Portfolio[]>(
     "/wp-json/wp/v2/portfolio",
     [],
-    { _embed: true, per_page: params?.per_page || 100 },
+    { per_page: params?.per_page || 100 },
     ["wordpress", "portfolio"]
   );
 }
 
 export async function getAllPortfolioCategories(): Promise<Category[]> {
   return wordpressFetchGraceful<Category[]>(
-    "/wp-json/wp/v2/portfolio_category",
+    "/wp-json/wp/v2/portfolio",
     [],
     undefined,
-    ["wordpress", "portfolio_category"]
+    ["wordpress", "portfolio"]
   );
 }
 
 export async function getPortfolioItemsPaginated(
   page: number = 1,
-  perPage: number = 9,
+  per_page: number = 9,
   filterParams?: {
     category?: string;
     search?: string;
   }
 ): Promise<WordPressResponse<Portfolio[]>> {
   const query: Record<string, any> = {
-    _embed: true,
-    per_page: perPage,
+    per_page,
     page,
+    _fields: "id,slug,title,acf",
   };
 
   const cacheTags = ["wordpress", "portfolio", `portfolio-page-${page}`];
@@ -508,7 +508,7 @@ export async function getPortfolioItemsPaginated(
     cacheTags.push("portfolio-search");
   }
   if (filterParams?.category) {
-    query.portfolio_category = filterParams.category;
+    query.portfolio = filterParams.category;
     cacheTags.push(`portfolio-category-${filterParams.category}`);
   }
 

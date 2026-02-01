@@ -125,8 +125,8 @@ export async function POST(request: NextRequest) {
           revalidateTag(`category-${contentId}`, { expire: 0 });
         }
         revalidatePath("/posts", "page");
-      } else if (contentType === "portfolio_category") {
-        revalidateTag("portfolio_category", { expire: 0 });
+      } else if (contentType === "portfolio") {
+        revalidateTag("portfolio", { expire: 0 });
         revalidatePath("/portfolio", "page");
       } else if (contentType === "tag") {
         revalidateTag("tags", { expire: 0 });
