@@ -6,13 +6,13 @@ import Link from "next/link";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
+import { getMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = getMetadata(undefined, {
   title: "All Authors",
   description: "Browse all authors of our blog posts",
-  alternates: {
-    canonical: "/posts/authors",
-  },
-};
+  path: "/posts/authors",
+});
 
 export default async function Page() {
   const authors = await getAllAuthors();

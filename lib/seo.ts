@@ -15,6 +15,7 @@ export function getMetadata(
         description?: string;
         type?: "website" | "article";
         noIndex?: boolean;
+        noArchive?: boolean;
         path?: string;
     } = {}
 ): Metadata {
@@ -47,9 +48,12 @@ export function getMetadata(
     description = stripHtml(description).slice(0, 160);
 
     // 4. Handle specific page titles
-    if (item && !title.includes(siteName) && !options.title) {
+    // We brand the title manually and return it as an absolute title.
+    // This gives us full control and prevents Next.js from applying templates twice.
+    if (!title.toLowerCase().includes(siteName.toLowerCase())) {
         title = `${title} | ${siteName}`;
     }
+    const finalTitle = { absolute: title };
 
     // 5. Featured Image Fallback
     if (!wpItem?.yoast_head_json?.og_image && wpItem?._embedded?.["wp:featuredmedia"]?.[0]?.source_url) {
@@ -59,11 +63,11 @@ export function getMetadata(
     const url = options.path ? `${baseUrl}${options.path}` : (item?.link ? item.link : baseUrl);
 
     return {
-        title,
+        title: finalTitle,
         description,
         openGraph: {
             ...defaultSeoConfig.openGraph,
-            title,
+            title: typeof finalTitle === 'string' ? finalTitle : finalTitle.absolute,
             description,
             type,
             url,
@@ -72,13 +76,13 @@ export function getMetadata(
                     url: ogImage,
                     width: 1200,
                     height: 630,
-                    alt: title,
+                    alt: typeof finalTitle === 'string' ? finalTitle : finalTitle.absolute,
                 },
             ],
         },
         twitter: {
             ...defaultSeoConfig.twitter,
-            title,
+            title: typeof finalTitle === 'string' ? finalTitle : finalTitle.absolute,
             description,
             images: [ogImage],
         },

@@ -13,7 +13,9 @@ import { ContactForm } from "@/components/contactform/contactform";
 
 
 export const metadata: Metadata = {
-  title: "Kumocode | Expert Web Development & Digital Solutions South Africa",
+  title: {
+    absolute: "Kumocode | Expert Web Development & Digital Solutions South Africa",
+  },
   description: "Kumocode builds high-performance, SEO-friendly websites and custom digital solutions designed to help South African businesses scale. Fast, secure, and built for growth.",
 };
 
