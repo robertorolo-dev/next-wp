@@ -103,7 +103,6 @@ export default async function Page({
                         <Breadcrumbs
                             items={[
                                 { label: "Portfolio", href: "/portfolio" },
-                                { label: tag, active: false },
                                 { label: stripHtml(item.title.rendered), active: true },
                             ]}
                         />
@@ -114,9 +113,6 @@ export default async function Page({
                         <div className="border-b-[3px] border-black pb-12">
                             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                                 <div className="flex-1">
-                                    <span className="inline-block bg-[#FFC224] text-black text-xs font-bold px-4 py-1.5 rounded-full mb-6 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                                        {tag}
-                                    </span>
                                     <h1 className="text-4xl md:text-6xl font-black leading-tight text-[#0B0B0B] mb-6">
                                         {stripHtml(item.title.rendered)}
                                     </h1>

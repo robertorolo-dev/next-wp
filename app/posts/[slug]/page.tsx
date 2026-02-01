@@ -106,7 +106,6 @@ export default async function Page({
             <Breadcrumbs
               items={[
                 { label: "Blog", href: "/posts" },
-                { label: category.name, href: `/posts/?category=${category.id}` },
                 { label: stripHtml(post.title.rendered), active: true },
               ]}
             />
@@ -115,9 +114,6 @@ export default async function Page({
           <div className="space-y-12">
             {/* Post Header */}
             <div className="border-b-[3px] border-black pb-12">
-              <span className="inline-block bg-[#6366F1] text-white text-xs font-bold px-4 py-1.5 rounded-full mb-6 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                {category.name}
-              </span>
               <h1 className="text-4xl md:text-6xl font-black leading-tight text-[#0B0B0B] mb-8 max-w-4xl">
                 {stripHtml(post.title.rendered)}
               </h1>
