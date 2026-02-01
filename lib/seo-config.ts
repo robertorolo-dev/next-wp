@@ -13,7 +13,7 @@ export const defaultSeoConfig = {
         siteName: siteConfig.site_name,
         images: [
             {
-                url: `${siteConfig.site_domain}/opengraph-image.jpeg`,
+                url: `${siteConfig.site_domain}/opengraph-image.png`,
                 width: 1200,
                 height: 630,
                 alt: siteConfig.site_name,
