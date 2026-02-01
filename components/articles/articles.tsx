@@ -99,9 +99,14 @@ export async function ArticlesSection() {
                                     )}
                                 </div>
                                 <div className="p-6 md:p-8">
-                                    <h3 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">
+                                    <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">
                                         {stripHtml(featuredPost.title.rendered)}
                                     </h3>
+                                    {featuredPost.excerpt?.rendered && (
+                                        <p className="text-gray-600 text-sm md:text-lg mb-6 line-clamp-2 md:line-clamp-3">
+                                            {stripHtml(featuredPost.excerpt.rendered)}
+                                        </p>
+                                    )}
                                     <div className="flex items-center gap-3 md:gap-4">
                                         {getEmbeddedAuthor(featuredPost) && (
                                             <>
@@ -143,7 +148,7 @@ export async function ArticlesSection() {
                                 <div className="group bg-white border-[3px] border-black rounded-3xl overflow-hidden hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300">
                                     <div className="flex flex-col sm:flex-row">
                                         {/* Image area */}
-                                        <div className="bg-[#EDEDED] min-w-full sm:min-w-[200px] md:min-w-[280px] min-h-[180px] sm:min-h-[200px] relative m-0 sm:m-3 md:m-4 rounded-none sm:rounded-2xl overflow-hidden flex-shrink-0">
+                                        <div className="bg-[#EDEDED] sm:min-w-[200px] md:min-w-[280px] min-h-[180px] sm:min-h-[200px] relative m-3 md:m-4 rounded-2xl overflow-hidden flex-shrink-0">
                                             {getEmbeddedCategories(post)[0] && (
                                                 <span className="absolute top-3 right-3 md:top-4 md:right-4 inline-block bg-black text-white text-xs font-semibold px-3 py-1.5 rounded-lg z-10">
                                                     {getEmbeddedCategories(post)[0].name}
@@ -154,7 +159,7 @@ export async function ArticlesSection() {
                                                     src={getEmbeddedMedia(post).source_url}
                                                     alt={getEmbeddedMedia(post).alt_text || post.title.rendered}
                                                     fill
-                                                    className="object-cover sm:object-contain p-0 sm:p-3 md:p-4 rounded-none sm:rounded-2xl transition-transform duration-500 ease-out group-hover:scale-110"
+                                                    className="object-cover rounded-2xl transition-transform duration-500 ease-out group-hover:scale-110"
                                                 />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center text-gray-400">
@@ -167,9 +172,40 @@ export async function ArticlesSection() {
                                             <h3 className="text-lg md:text-2xl font-bold mb-3 md:mb-4">
                                                 {stripHtml(post.title.rendered)}
                                             </h3>
-                                            <p className="text-gray-600 text-sm md:text-lg leading-relaxed line-clamp-2">
-                                                {stripHtml(post.excerpt.rendered)}
-                                            </p>
+                                            {post.excerpt?.rendered && (
+                                                <p className="text-gray-600 text-sm md:text-lg leading-relaxed line-clamp-2 mb-6">
+                                                    {stripHtml(post.excerpt.rendered)}
+                                                </p>
+                                            )}
+                                            <div className="flex items-center gap-3">
+                                                {getEmbeddedAuthor(post) && (
+                                                    <>
+                                                        <div className="w-10 h-10 md:w-12 md:h-12 bg-[#FDB927] border-2 border-black rounded-full overflow-hidden flex-shrink-0">
+                                                            {getEmbeddedAuthor(post).avatar_urls?.['96'] ? (
+                                                                <Image
+                                                                    src={getEmbeddedAuthor(post).avatar_urls['96']}
+                                                                    alt={getEmbeddedAuthor(post).name}
+                                                                    width={48}
+                                                                    height={48}
+                                                                    className="object-cover"
+                                                                />
+                                                            ) : (
+                                                                <div className="w-full h-full flex items-center justify-center text-lg font-bold">
+                                                                    {getEmbeddedAuthor(post).name.charAt(0)}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div>
+                                                            <div className="font-bold text-sm md:text-base text-[#0B0B0B]">
+                                                                {getEmbeddedAuthor(post).name}
+                                                            </div>
+                                                            <div className="text-xs md:text-sm text-gray-600">
+                                                                {formatDate(post.date)}
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
