@@ -87,6 +87,16 @@ export async function POST(request: NextRequest) {
         });
       }
 
+      // Handle full revalidation (from manual button)
+      if (contentType === "all") {
+        revalidateTag("wordpress", { expire: 0 });
+        revalidateTag("posts", { expire: 0 });
+        revalidateTag("pages", { expire: 0 });
+        revalidateTag("portfolio", { expire: 0 });
+        revalidateTag("site-options", { expire: 0 });
+        revalidatePath("/", "layout");
+      }
+
       if (contentType === "post") {
         revalidateTag("posts", { expire: 0 });
         if (contentId) {
@@ -94,32 +104,60 @@ export async function POST(request: NextRequest) {
         }
         // Clear all post pages when any post changes
         revalidateTag("posts-page-1", { expire: 0 });
+        revalidatePath("/posts", "page");
+      } else if (contentType === "page") {
+        revalidateTag("pages", { expire: 0 });
+        if (contentId) {
+          revalidateTag(`page-${contentId}`, { expire: 0 });
+        }
+      } else if (contentType === "portfolio") {
+        revalidateTag("portfolio", { expire: 0 });
+        if (contentId) {
+          revalidateTag(`portfolio-${contentId}`, { expire: 0 });
+        }
+        // Clear portfolio archive index
+        revalidateTag("portfolio-page-1", { expire: 0 });
+        revalidatePath("/portfolio", "page");
       } else if (contentType === "category") {
         revalidateTag("categories", { expire: 0 });
         if (contentId) {
           revalidateTag(`posts-category-${contentId}`, { expire: 0 });
           revalidateTag(`category-${contentId}`, { expire: 0 });
         }
+        revalidatePath("/posts", "page");
+      } else if (contentType === "portfolio_category") {
+        revalidateTag("portfolio_category", { expire: 0 });
+        revalidatePath("/portfolio", "page");
       } else if (contentType === "tag") {
         revalidateTag("tags", { expire: 0 });
         if (contentId) {
           revalidateTag(`posts-tag-${contentId}`, { expire: 0 });
           revalidateTag(`tag-${contentId}`, { expire: 0 });
         }
+        revalidatePath("/posts", "page");
       } else if (contentType === "author" || contentType === "user") {
         revalidateTag("authors", { expire: 0 });
         if (contentId) {
           revalidateTag(`posts-author-${contentId}`, { expire: 0 });
           revalidateTag(`author-${contentId}`, { expire: 0 });
         }
+        revalidatePath("/posts", "page");
+      } else if (contentType === "media") {
+        // Media changes usually affect everything (featured images, etc.)
+        revalidateTag("wordpress", { expire: 0 });
+        revalidateTag("site-options", { expire: 0 });
+      } else if (contentType === "menu") {
+        // Menu changes affect the layout
+        revalidateTag("wordpress", { expire: 0 });
       } else if (contentType === "options" || contentType === "site-options") {
-        // Revalidate site options (e.g., banner images)
+        // Revalidate site options (e.g., banner images, social links)
         revalidateTag("site-options", { expire: 0 });
         console.log("Site options revalidated");
       }
 
-      // Also revalidate the entire layout for safety
+      // Always revalidate the entire layout and home page for safety when content changes
       revalidatePath("/", "layout");
+      revalidatePath("/", "page");
 
       return NextResponse.json({
         revalidated: true,
