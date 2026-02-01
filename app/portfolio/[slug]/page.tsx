@@ -1,6 +1,7 @@
 import {
     getPortfolioBySlug,
     getAllPortfolioSlugs,
+    getSiteOptions,
 } from "@/lib/wordpress";
 
 import { Section, Container, Article, Prose } from "@/components/craft";
@@ -15,6 +16,8 @@ import { ArticleJsonLd, BreadcrumbJsonLd } from "next-seo";
 
 import { getMetadata } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
+import { SocialShare } from "@/components/blog/social-share";
+import { SocialFollow } from "@/components/blog/social-follow";
 
 export async function generateStaticParams() {
     return await getAllPortfolioSlugs();
@@ -54,6 +57,8 @@ export default async function Page({
     const projectDate = item.acf?.project_date;
     const technologies = item.acf?.technologies;
     const gallery = item.acf?.project_gallery;
+    const postUrl = `${siteConfig.site_domain}/portfolio/${item.slug}`;
+    const siteOptions = await getSiteOptions();
 
     return (
         <>
@@ -173,57 +178,73 @@ export default async function Page({
 
                             {/* Project Metadata Sidebar */}
                             <aside className="md:col-span-1">
-                                <div className="border-[3px] border-black rounded-[32px] p-8 bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sticky top-24">
-                                    <h3 className="text-2xl font-black mb-8 border-b-2 border-black pb-4 uppercase tracking-tight">Project Details</h3>
-                                    <div className="space-y-8">
-                                        {clientName && (
-                                            <div>
-                                                <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Client</p>
-                                                <p className="text-xl font-bold text-[#0B0B0B]">{clientName}</p>
-                                            </div>
-                                        )}
-
-                                        {projectDate && (
-                                            <div>
-                                                <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Completion</p>
-                                                <p className="text-xl font-bold text-[#0B0B0B]">
-                                                    {new Date(projectDate).toLocaleDateString("en-US", {
-                                                        month: "long",
-                                                        year: "numeric",
-                                                    })}
-                                                </p>
-                                            </div>
-                                        )}
-
-                                        {technologies && (
-                                            <div>
-                                                <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Stack</p>
-                                                <div className="flex flex-wrap gap-2 mt-3">
-                                                    {technologies.split(",").map((tech, index) => (
-                                                        <span
-                                                            key={index}
-                                                            className="bg-gray-100 text-black border-2 border-black px-3 py-1 rounded-lg text-xs font-bold"
-                                                        >
-                                                            {tech.trim()}
-                                                        </span>
-                                                    ))}
+                                <div className="space-y-8 sticky top-24">
+                                    <div className="border-[3px] border-black rounded-[32px] p-8 bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                                        <h3 className="text-2xl font-black mb-8 border-b-2 border-black pb-4 uppercase tracking-tight">Project Details</h3>
+                                        <div className="space-y-8">
+                                            {clientName && (
+                                                <div>
+                                                    <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Client</p>
+                                                    <p className="text-xl font-bold text-[#0B0B0B]">{clientName}</p>
                                                 </div>
-                                            </div>
-                                        )}
+                                            )}
 
-                                        {projectUrl && (
-                                            <div className="pt-4">
-                                                <a
-                                                    href={projectUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="group inline-flex items-center gap-2 text-[#0B0B0B] font-black hover:text-[#6366F1] transition-colors"
-                                                >
-                                                    Visit Website
-                                                    <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                                                </a>
-                                            </div>
-                                        )}
+                                            {projectDate && (
+                                                <div>
+                                                    <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Completion</p>
+                                                    <p className="text-xl font-bold text-[#0B0B0B]">
+                                                        {new Date(projectDate).toLocaleDateString("en-US", {
+                                                            month: "long",
+                                                            year: "numeric",
+                                                        })}
+                                                    </p>
+                                                </div>
+                                            )}
+
+                                            {technologies && (
+                                                <div>
+                                                    <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Stack</p>
+                                                    <div className="flex flex-wrap gap-2 mt-3">
+                                                        {technologies.split(",").map((tech, index) => (
+                                                            <span
+                                                                key={index}
+                                                                className="bg-gray-100 text-black border-2 border-black px-3 py-1 rounded-lg text-xs font-bold"
+                                                            >
+                                                                {tech.trim()}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {projectUrl && (
+                                                <div className="pt-4">
+                                                    <a
+                                                        href={projectUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="group inline-flex items-center gap-2 text-[#0B0B0B] font-black hover:text-[#6366F1] transition-colors"
+                                                    >
+                                                        Visit Website
+                                                        <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="border-[3px] border-black rounded-[32px] p-8 bg-[#6366F1]/10 border-dashed">
+                                        <h3 className="text-lg font-black mb-4 uppercase tracking-tight">Share Project</h3>
+                                        <div className="space-y-6">
+                                            <SocialShare url={postUrl} title={stripHtml(item.title.rendered)} />
+
+                                            {siteOptions?.social_links && siteOptions.social_links.length > 0 && (
+                                                <div className="pt-6 border-t border-black/10">
+                                                    <p className="text-xs font-bold uppercase tracking-wider mb-4 text-gray-500">Follow our journey</p>
+                                                    <SocialFollow links={siteOptions.social_links} />
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </aside>

@@ -4,6 +4,7 @@ import {
   getAuthorById,
   getCategoryById,
   getAllPostSlugs,
+  getSiteOptions,
 } from "@/lib/wordpress";
 
 import { Section, Container, Article, Prose } from "@/components/craft";
@@ -19,6 +20,8 @@ import { ArticleJsonLd, BreadcrumbJsonLd } from "next-seo";
 
 import { getMetadata } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
+import { SocialShare } from "@/components/blog/social-share";
+import { SocialFollow } from "@/components/blog/social-follow";
 
 export async function generateStaticParams() {
   return await getAllPostSlugs();
@@ -57,6 +60,8 @@ export default async function Page({
     year: "numeric",
   });
   const category = await getCategoryById(post.categories[0]);
+  const postUrl = `${siteConfig.site_domain}/posts/${post.slug}`;
+  const siteOptions = await getSiteOptions();
 
   return (
     <>
@@ -174,9 +179,15 @@ export default async function Page({
 
                   <div className="border-[3px] border-black rounded-[32px] p-8 bg-[#FDB927]/10 border-dashed">
                     <h3 className="text-lg font-black mb-4 uppercase tracking-tight">Share this post</h3>
-                    <div className="flex gap-4">
-                      {/* Placeholder for share icons if needed */}
-                      <p className="text-sm font-medium text-gray-600 italic font-serif">Spread the word and inspire others.</p>
+                    <div className="space-y-6">
+                      <SocialShare url={postUrl} title={stripHtml(post.title.rendered)} />
+
+                      {siteOptions?.social_links && siteOptions.social_links.length > 0 && (
+                        <div className="pt-6 border-t border-black/10">
+                          <p className="text-xs font-bold uppercase tracking-wider mb-4 text-gray-500">Follow our journey</p>
+                          <SocialFollow links={siteOptions.social_links} />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

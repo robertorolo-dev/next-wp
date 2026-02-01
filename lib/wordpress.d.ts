@@ -289,6 +289,11 @@ export interface SiteOptions {
     height: number;
     sizes: Record<string, string | number>;
   }>;
+  social_links?: Array<{
+    platform: string;
+    url: string;
+    icon?: string;
+  }>;
 }
 
 // Component Props Types
