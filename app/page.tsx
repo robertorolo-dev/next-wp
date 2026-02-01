@@ -26,14 +26,9 @@ export default async function Home() {
       <NormalHero />
       <LogoMarquee />
 
-      <Section>
-        <Container>
-          <ServicesSection />
-          <PortfolioSection />
-          <ArticlesSection />
-          {/* <ToDelete /> */}
-        </Container>
-      </Section>
+      <ServicesSection />
+      <PortfolioSection />
+      <ArticlesSection />
       <ContactForm />
 
     </>

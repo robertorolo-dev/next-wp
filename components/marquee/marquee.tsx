@@ -18,7 +18,7 @@ export async function LogoMarquee() {
     ];
 
   return (
-    <div className="overflow-hidden bg-black py-16">
+    <div className="overflow-hidden bg-black py-12">
       <div className="relative flex">
         <div className="flex animate-marquee shrink-0">
           {/* Render 4 identical sets to ensure enough content for wide screens */}
