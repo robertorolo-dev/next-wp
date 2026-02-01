@@ -106,7 +106,6 @@ export default async function Page({
             <Breadcrumbs
               items={[
                 { label: "Blog", href: "/posts" },
-                { label: stripHtml(post.title.rendered), active: true },
               ]}
             />
           </div>

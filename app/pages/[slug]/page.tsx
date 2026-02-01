@@ -7,7 +7,8 @@ import { stripHtml } from "@/lib/utils";
 import type { Metadata } from "next";
 
 import { getMetadata } from "@/lib/seo";
-import { Breadcrumbs } from "@/components/ui/breadcrumbs";
+import { BreadcrumbJsonLd } from "next-seo";
+
 
 // Revalidate pages every hour
 export const revalidate = 3600;
@@ -44,20 +45,28 @@ export default async function Page({
   }
 
   return (
-    <Section>
-      <Container>
-        <div className="mb-12">
-          <Breadcrumbs
-            items={[
-              { label: stripHtml(page.title.rendered), active: true },
-            ]}
-          />
-        </div>
-        <Prose>
-          <h2>{stripHtml(page.title.rendered)}</h2>
-          <div dangerouslySetInnerHTML={{ __html: page.content.rendered }} />
-        </Prose>
-      </Container>
-    </Section>
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          {
+            name: "Home",
+            item: siteConfig.site_domain,
+          },
+          {
+            name: stripHtml(page.title.rendered),
+            item: `${siteConfig.site_domain}/${page.slug}`,
+          },
+        ]}
+      />
+      <Section>
+        <Container>
+
+          <Prose>
+            <h2>{stripHtml(page.title.rendered)}</h2>
+            <div dangerouslySetInnerHTML={{ __html: page.content.rendered }} />
+          </Prose>
+        </Container>
+      </Section>
+    </>
   );
 }

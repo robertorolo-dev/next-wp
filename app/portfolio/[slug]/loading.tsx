@@ -10,7 +10,6 @@ export default function Loading() {
                     <Breadcrumbs
                         items={[
                             { label: "Portfolio", href: "/portfolio" },
-                            { label: "...", active: true },
                         ]}
                     />
                 </div>
