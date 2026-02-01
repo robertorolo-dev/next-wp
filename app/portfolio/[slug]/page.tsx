@@ -237,13 +237,6 @@ export default async function Page({
                                         <h3 className="text-lg font-black mb-4 uppercase tracking-tight">Share Project</h3>
                                         <div className="space-y-6">
                                             <SocialShare url={postUrl} title={stripHtml(item.title.rendered)} />
-
-                                            {siteOptions?.social_links && siteOptions.social_links.length > 0 && (
-                                                <div className="pt-6 border-t border-black/10">
-                                                    <p className="text-xs font-bold uppercase tracking-wider mb-4 text-gray-500">Follow our journey</p>
-                                                    <SocialFollow links={siteOptions.social_links} />
-                                                </div>
-                                            )}
                                         </div>
                                     </div>
                                 </div>

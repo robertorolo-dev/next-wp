@@ -3,8 +3,8 @@ import Link from "next/link"
 import { PortfolioCard } from "./portfolio-card"
 
 export async function PortfolioSection() {
-    // Fetch portfolio items from WordPress
-    const portfolioItems = await getAllPortfolioItems()
+    // Fetch only the latest 3 portfolio items from WordPress
+    const portfolioItems = await getAllPortfolioItems({ per_page: 3 })
 
     // If no portfolio items, show a placeholder message
     if (!portfolioItems || portfolioItems.length === 0) {

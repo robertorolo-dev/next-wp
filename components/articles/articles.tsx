@@ -27,12 +27,13 @@ function formatDate(dateString: string) {
 }
 
 export async function ArticlesSection() {
-    // Fetch the latest 3 posts
-    const posts = await getAllPosts()
+    // Fetch only the latest 3 posts to optimize performance
+    const posts = await getAllPosts({ per_page: 3 })
+    console.log(`[ArticlesSection] Fetched ${posts?.length || 0} posts`);
     const latestPosts = posts.slice(0, 3)
 
     // If no posts, show placeholder
-    if (latestPosts.length === 0) {
+    if (!latestPosts || latestPosts.length === 0) {
         return (
             <section className="container mx-auto px-4 py-16 md:py-24">
                 <div className="max-w-7xl mx-auto">

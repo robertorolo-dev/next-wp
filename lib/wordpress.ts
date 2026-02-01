@@ -229,10 +229,11 @@ export async function getAllPosts(filterParams?: {
   tag?: string;
   category?: string;
   search?: string;
+  per_page?: number;
 }): Promise<Post[]> {
   const query: Record<string, any> = {
     _embed: true,
-    per_page: 100,
+    per_page: filterParams?.per_page || 100,
   };
 
   if (filterParams?.search) query.search = filterParams.search;
@@ -310,7 +311,7 @@ export async function getTagBySlug(slug: string): Promise<Tag> {
 }
 
 export async function getAllPages(): Promise<Page[]> {
-  return wordpressFetchGraceful<Page[]>("/wp-json/wp/v2/pages", [], undefined, [
+  return wordpressFetchGraceful<Page[]>("/wp-json/wp/v2/pages", [], { per_page: 100 }, [
     "wordpress",
     "pages",
   ]);
@@ -468,11 +469,11 @@ export async function getPostsByAuthorPaginated(
 }
 
 // Portfolio Custom Post Type Functions
-export async function getAllPortfolioItems(): Promise<Portfolio[]> {
+export async function getAllPortfolioItems(params?: { per_page?: number }): Promise<Portfolio[]> {
   return wordpressFetchGraceful<Portfolio[]>(
     "/wp-json/wp/v2/portfolio",
     [],
-    { _embed: true, per_page: 100 },
+    { _embed: true, per_page: params?.per_page || 100 },
     ["wordpress", "portfolio"]
   );
 }
@@ -566,12 +567,14 @@ export async function getAllPortfolioSlugs(): Promise<{ slug: string }[]> {
 // Site Options Functions
 // Note: Requires custom REST API endpoint in WordPress (see .wordpress-setup/acf-site-options-endpoint.php)
 export async function getSiteOptions(): Promise<import("./wordpress.d").SiteOptions> {
-  return wordpressFetchGraceful<import("./wordpress.d").SiteOptions>(
+  const options = await wordpressFetchGraceful<import("./wordpress.d").SiteOptions>(
     "/wp-json/custom/v1/site-options",
     {},
     undefined,
     ["wordpress", "site-options"]
   );
+  console.log(`[getSiteOptions] Fetched options keys: ${Object.keys(options || {}).join(", ")}`);
+  return options;
 }
 
 export { WordPressAPIError };
