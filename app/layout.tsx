@@ -45,6 +45,7 @@ export const metadata: Metadata = {
 import { OrganizationJsonLd } from "next-seo";
 
 import { BackToTop } from "@/components/back-to-top";
+import { TableEnhancer } from "@/components/ui/table-enhancer";
 
 export default function RootLayout({
   children,
@@ -79,6 +80,7 @@ export default function RootLayout({
           <Nav />
           {children}
           <BackToTop />
+          <TableEnhancer />
           <Footer />
         </ThemeProvider>
         <Analytics />

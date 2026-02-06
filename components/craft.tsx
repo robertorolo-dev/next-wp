@@ -147,11 +147,11 @@ const styles = {
       "[&_pre_code]:block [&_pre_code]:w-full",
     ],
     tables: [
-      "[&_table]:w-full [&_table]:my-4 [&_table]:overflow-x-auto [&_table]:rounded-lg [&_table]:border",
-      "[&_thead]:bg-muted/50",
-      "[&_tr]:border-b [&_tr]:last:border-0",
-      "[&_th]:border-r [&_th]:px-4 [&_th]:py-2 [&_th]:text-left [&_th]:font-semibold [&_th]:last:border-0",
-      "[&_td]:border-r [&_td]:px-4 [&_td]:py-2 [&_td]:last:border-0",
+      "[&_table]:w-full [&_table]:my-12 [&_table]:border-separate [&_table]:border-spacing-0 md:[&_table]:border-2 md:[&_table]:border-primary md:[&_table]:rounded-2xl md:[&_table]:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] md:[&_table]:overflow-hidden",
+      "[&_thead]:bg-muted/50 max-md:[&_thead]:hidden",
+      "md:[&_tr]:border-b md:[&_tr]:border-primary/10 md:[&_tr]:last:border-0 md:hover:[&_tr]:bg-muted/30 md:[&_tr]:transition-colors max-md:[&_tr]:block max-md:[&_tr]:border-2 max-md:[&_tr]:border-primary max-md:[&_tr]:rounded-2xl max-md:[&_tr]:mb-12 max-md:[&_tr]:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] max-md:[&_tr]:overflow-hidden max-md:[&_tr]:bg-card max-md:[&_tr]:transition-all max-md:hover:[&_tr]:translate-y-[-2px] max-md:hover:[&_tr]:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] max-md:[&_tr:has(th):not(:has(td))]:hidden",
+      "md:[&_th]:border-r md:[&_th]:border-primary/10 [&_th]:px-6 [&_th]:py-4 [&_th]:text-left [&_th]:font-bold md:[&_th]:last:border-0 [&_th]:uppercase [&_th]:text-xs [&_th]:tracking-widest",
+      "md:[&_td]:border-r md:[&_td]:border-primary/10 [&_td]:px-6 [&_td]:py-4 md:[&_td]:last:border-0 max-md:[&_td]:flex max-md:[&_td]:justify-between max-md:[&_td]:items-center max-md:[&_td]:border-b max-md:[&_td]:border-primary/5 max-md:[&_td]:last:border-b-0 max-md:[&_td]:px-6 max-md:[&_td]:py-4 max-md:[&_td]:break-words max-md:[&_td]:before:content-[attr(data-label)] max-md:[&_td]:before:font-bold max-md:[&_td]:before:text-xs max-md:[&_td]:before:uppercase max-md:[&_td]:before:tracking-widest max-md:[&_td]:before:opacity-50 max-md:[&_td]:before:mr-4",
     ],
     media: [
       "[&_img]:rounded-lg [&_img]:border [&_img]:my-4 [&_img]:max-w-full [&_img]:h-auto",
