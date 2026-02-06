@@ -29,7 +29,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const page = await getPageBySlug(slug);
 
-  return getMetadata(page, { type: "article" });
+  return getMetadata(page, { type: "article", path: `/pages/${slug}` });
 }
 
 export default async function Page({
@@ -54,7 +54,7 @@ export default async function Page({
           },
           {
             name: stripHtml(page.title.rendered),
-            item: `${siteConfig.site_domain}/${page.slug}`,
+            item: `${siteConfig.site_domain}/pages/${page.slug}`,
           },
         ]}
       />

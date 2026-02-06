@@ -35,7 +35,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
-  return getMetadata(post, { type: "article" });
+  return getMetadata(post, { type: "article", path: `/posts/${slug}` });
 }
 
 export default async function Page({

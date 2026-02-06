@@ -12,12 +12,13 @@ import { NormalHero } from "@/components/normal-hero/normalhero";
 import { ContactForm } from "@/components/contactform/contactform";
 
 
-export const metadata: Metadata = {
-  title: {
-    absolute: "Kumocode | Expert Web Development & Digital Solutions South Africa",
-  },
+import { getMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = getMetadata(undefined, {
+  title: "Expert Web Development & Digital Solutions South Africa",
   description: "Kumocode builds high-performance, SEO-friendly websites and custom digital solutions designed to help South African businesses scale. Fast, secure, and built for growth.",
-};
+  path: "/",
+});
 
 // This page is using the craft.tsx component and design system
 export default async function Home() {

@@ -31,7 +31,7 @@ export async function generateMetadata({
     const { slug } = await params;
     const item = await getPortfolioBySlug(slug);
 
-    return getMetadata(item, { type: "article" });
+    return getMetadata(item, { type: "article", path: `/portfolio/${slug}` });
 }
 
 export default async function Page({
