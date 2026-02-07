@@ -18,11 +18,16 @@ export async function PortfolioCard({
         : "No description available"));
 
     const tag = stripHtml(item.acf?.project_tag || "Design");
-    const backgroundInput = item.acf?.background_color || "bg-[#6366F1]";
+    const backgroundInput = (item.acf?.background_color || "bg-[#6366F1]").trim();
 
-    // Support dynamic hex colors from CMS (Tailwind classes like bg-[#fff] aren't pre-compiled)
-    const hexMatch = backgroundInput.match(/\[?(#[a-fA-F0-9]{3,8})\]?/i);
-    const hexColor = hexMatch ? hexMatch[1] : null;
+    // 1. Try to find a hex code (with or without #, inside or outside brackets)
+    // Matches: #fff, #123456, [#fff], bg-[#fff], 123456
+    const hexRegex = /(?:#|\[#)([a-fA-F0-9]{3,8})\]?|^([a-fA-F0-9]{6})$|^([a-fA-F0-9]{3})$/i;
+    const hexMatch = backgroundInput.match(hexRegex);
+
+    // The hex could be in group 1 (standard/brackets), group 2 (6-char raw), or group 3 (3-char raw)
+    const rawHex = hexMatch ? (hexMatch[1] || hexMatch[2] || hexMatch[3]) : null;
+    const hexColor = rawHex ? `#${rawHex}` : null;
 
     const containerStyle = hexColor ? { backgroundColor: hexColor } : {};
     const bgColorClass = hexColor ? "" : backgroundInput;
