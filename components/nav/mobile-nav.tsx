@@ -67,7 +67,7 @@ export function MobileNav() {
                 className="w-full"
                 onClick={() => setOpen(false)}
               >
-                <a href="#contact">Get Started</a>
+                <Link href="/#contact">Get Started</Link>
               </Button>
             </div>
           </div>
