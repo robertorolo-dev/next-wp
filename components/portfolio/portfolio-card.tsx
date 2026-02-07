@@ -13,11 +13,11 @@ export async function PortfolioCard({
 }) {
     // Get ACF fields and data
     const title = stripHtml(item.title?.rendered || "Untitled Project");
-    const description = item.acf?.project_description || (item.excerpt?.rendered
+    const description = stripHtml(item.acf?.project_description || (item.excerpt?.rendered
         ? stripHtml(item.excerpt.rendered).split(" ").slice(0, 15).join(" ") + "..."
-        : "No description available");
+        : "No description available"));
 
-    const tag = item.acf?.project_tag || "Design";
+    const tag = stripHtml(item.acf?.project_tag || "Design");
     const backgroundInput = item.acf?.background_color || "bg-[#6366F1]";
 
     // Support dynamic hex colors from CMS (Tailwind classes like bg-[#fff] aren't pre-compiled)
