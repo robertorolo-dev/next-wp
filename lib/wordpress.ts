@@ -480,10 +480,10 @@ export async function getAllPortfolioItems(params?: { per_page?: number }): Prom
 
 export async function getAllPortfolioCategories(): Promise<Category[]> {
   return wordpressFetchGraceful<Category[]>(
-    "/wp-json/wp/v2/portfolio",
+    "/wp-json/wp/v2/portfolio-category",
     [],
     undefined,
-    ["wordpress", "portfolio"]
+    ["wordpress", "portfolio-categories"]
   );
 }
 
@@ -508,7 +508,7 @@ export async function getPortfolioItemsPaginated(
     cacheTags.push("portfolio-search");
   }
   if (filterParams?.category) {
-    query.portfolio = filterParams.category;
+    query["portfolio-category"] = filterParams.category;
     cacheTags.push(`portfolio-category-${filterParams.category}`);
   }
 
