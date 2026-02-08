@@ -512,11 +512,15 @@ export async function getPortfolioItemsPaginated(
     cacheTags.push(`portfolio-category-${filterParams.category}`);
   }
 
-  return wordpressFetchPaginatedGraceful<Portfolio>(
+  const response = await wordpressFetchPaginatedGraceful<Portfolio>(
     "/wp-json/wp/v2/portfolio",
     query,
     cacheTags
   );
+
+  console.log(`[getPortfolioItemsPaginated] Page ${page} requested ${per_page}, received ${response.data.length}, total ${response.headers.total}`);
+
+  return response;
 }
 
 export async function getPortfolioBySlug(

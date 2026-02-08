@@ -257,6 +257,8 @@ export interface Portfolio extends WPEntity {
       title?: string;
       caption?: string;
     }>;
+    show_on_homepage?: boolean;
+    homepage_order?: number;
   };
   meta: Record<string, unknown>;
 }

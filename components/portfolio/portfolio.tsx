@@ -3,8 +3,23 @@ import Link from "next/link"
 import { PortfolioCard } from "./portfolio-card"
 
 export async function PortfolioSection() {
-    // Fetch only the latest 3 portfolio items from WordPress
-    const portfolioItems = await getAllPortfolioItems({ per_page: 3 })
+    // Fetch portfolio items from WordPress
+    const allPortfolioItems = await getAllPortfolioItems()
+
+    // Filter by show_on_homepage and sort by homepage_order
+    let portfolioItems = allPortfolioItems
+        .filter(item => item.acf?.show_on_homepage)
+        .sort((a, b) => {
+            const orderA = a.acf?.homepage_order !== undefined ? Number(a.acf.homepage_order) : 999;
+            const orderB = b.acf?.homepage_order !== undefined ? Number(b.acf.homepage_order) : 999;
+            return orderA - orderB;
+        });
+
+    if (portfolioItems.length === 0) {
+        portfolioItems = allPortfolioItems.slice(0, 3);
+    } else {
+        portfolioItems = portfolioItems.slice(0, 3);
+    }
 
     // If no portfolio items, show a placeholder message
     if (!portfolioItems || portfolioItems.length === 0) {
