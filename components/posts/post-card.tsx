@@ -28,6 +28,8 @@ export function PostCard({ post }: { post: any }) {
             src={media.source_url}
             alt={title}
             fill
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN8/x8AAuMB8f6Pdx8AAAAASUVORK5CYII="
           />
         ) : (
           <div className="flex items-center justify-center w-full h-full text-muted-foreground font-medium">

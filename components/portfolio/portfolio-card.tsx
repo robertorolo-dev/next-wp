@@ -83,6 +83,8 @@ export async function PortfolioCard({
                         src={illustration}
                         alt={title}
                         fill
+                        placeholder="blur"
+                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN8/x8AAuMB8f6Pdx8AAAAASUVORK5CYII="
                         className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
                     />
                 ) : (

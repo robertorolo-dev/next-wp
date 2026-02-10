@@ -106,7 +106,7 @@ const Nav = ({ className, children, id }: NavProps) => {
           <Image
             src={Logo}
             alt="Logo"
-            loading="eager"
+            priority
             className="dark:invert"
             width={170}
             height={26.44}
@@ -146,6 +146,7 @@ const Footer = async () => {
               <Image
                 src={cat}
                 alt="cat"
+                loading="lazy"
                 className="dark:invert"
                 width={80}
                 height={26.44}

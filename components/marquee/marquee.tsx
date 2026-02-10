@@ -31,6 +31,7 @@ export async function LogoMarquee() {
                   alt={item.alt || item.title || "Banner image"}
                   width={item.width || 200}
                   height={item.height || 48}
+                  loading="lazy"
                   className="h-12 w-auto object-contain"
                 />
               ))}

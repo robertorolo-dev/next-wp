@@ -90,6 +90,8 @@ export async function ArticlesSection() {
                                             src={getEmbeddedMedia(featuredPost).source_url}
                                             alt={getEmbeddedMedia(featuredPost).alt_text || featuredPost.title.rendered}
                                             fill
+                                            placeholder="blur"
+                                            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN8/x8AAuMB8f6Pdx8AAAAASUVORK5CYII="
                                             className="object-cover rounded-2xl transition-transform duration-500 ease-out group-hover:scale-110"
                                         />
                                     ) : (
@@ -161,6 +163,8 @@ export async function ArticlesSection() {
                                                     src={getEmbeddedMedia(post).source_url}
                                                     alt={getEmbeddedMedia(post).alt_text || post.title.rendered}
                                                     fill
+                                                    placeholder="blur"
+                                                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN8/x8AAuMB8f6Pdx8AAAAASUVORK5CYII="
                                                     className="object-cover rounded-2xl transition-transform duration-500 ease-out group-hover:scale-110"
                                                 />
                                             ) : (

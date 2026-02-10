@@ -47,7 +47,7 @@ export function ServicesSection() {
     ]
 
     return (
-        <section id="services" className="py-12 md:py-16">
+        <section id="services" className="py-12 md:py-16 scroll-mt-24">
             <div className="container mx-auto px-4">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-12 md:mb-16">
