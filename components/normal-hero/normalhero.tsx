@@ -1,7 +1,7 @@
 import { Mail, FolderOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { HeroSplineClient } from "./hero-spline-client"
+import { SplineFacade } from "./spline-facade"
 
 export function NormalHero() {
     return (
@@ -41,7 +41,7 @@ export function NormalHero() {
                     </div>
                 </div>
 
-                <HeroSplineClient />
+                <SplineFacade />
             </div>
         </section>
     )

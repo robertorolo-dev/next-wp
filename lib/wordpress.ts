@@ -72,7 +72,8 @@ const getFetchOptions = () => {
 async function wordpressFetch<T>(
   path: string,
   query?: Record<string, any>,
-  tags: string[] = ["wordpress"]
+  tags: string[] = ["wordpress"],
+  retries = 3
 ): Promise<T> {
   if (!baseUrl) {
     throw new Error("WordPress URL not configured");
@@ -80,31 +81,47 @@ async function wordpressFetch<T>(
 
   const url = `${baseUrl}${path}${query ? `?${querystring.stringify(query)}` : ""}`;
 
-  try {
-    const fetchOptions = getFetchOptions();
-    const response = await fetch(url, {
-      ...fetchOptions,
-      next: { tags, revalidate: CACHE_TTL },
-    });
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const fetchOptions = getFetchOptions();
+      const response = await fetch(url, {
+        ...fetchOptions,
+        next: { tags, revalidate: CACHE_TTL },
+      });
 
-    if (!response.ok) {
-      throw new WordPressAPIError(
-        `WordPress API request failed: ${response.statusText}`,
-        response.status,
-        url
-      );
-    }
+      if (!response.ok) {
+        throw new WordPressAPIError(
+          `WordPress API request failed: ${response.statusText}`,
+          response.status,
+          url
+        );
+      }
 
-    return response.json();
-  } catch (error) {
-    if (error instanceof WordPressAPIError) {
+      return response.json();
+    } catch (error) {
+      const isLastAttempt = attempt === retries;
+
+      if (error instanceof WordPressAPIError) {
+        throw error;
+      }
+
+      // Network errors (connection drops, timeouts, etc.)
+      if (!isLastAttempt) {
+        const delay = Math.min(1000 * Math.pow(2, attempt), 5000); // Exponential backoff, max 5s
+        console.warn(`[WordPress Fetch] Attempt ${attempt + 1} failed for ${path}, retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+
+      // Last attempt failed, throw the error
+      console.error(`Failed to fetch from WordPress URL: ${url}`);
+      console.error(`Error details:`, error);
       throw error;
     }
-    // Log the full URL and error for debugging
-    console.error(`Failed to fetch from WordPress URL: ${url}`);
-    console.error(`Error details:`, error);
-    throw error;
   }
+
+  // This should never be reached, but TypeScript needs it
+  throw new Error("Unexpected error in wordpressFetch");
 }
 
 // Graceful fetch - returns fallback when WordPress unavailable or on error
