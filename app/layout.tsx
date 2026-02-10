@@ -57,14 +57,6 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://secure.gravatar.com" />
         <link rel="dns-prefetch" href="https://secure.gravatar.com" />
-        <link
-          rel="preload"
-          href="/animations/happy_robot_button.spline"
-          as="fetch"
-          crossOrigin="anonymous"
-          // @ts-ignore - fetchPriority is valid but not in types yet
-          fetchPriority="high"
-        />
       </head>
       <body className={cn("min-h-screen font-sans antialiased", font.variable)}>
         <ThemeProvider
