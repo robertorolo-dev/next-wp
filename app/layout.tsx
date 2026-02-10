@@ -55,6 +55,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://secure.gravatar.com" />
+        <link rel="dns-prefetch" href="https://secure.gravatar.com" />
         <link
           rel="preload"
           href="/animations/happy_robot_button.spline"

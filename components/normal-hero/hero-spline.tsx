@@ -2,7 +2,11 @@
 
 import Spline from '@splinetool/react-spline'
 
-export function HeroSpline() {
+interface HeroSplineProps {
+    onLoad?: () => void;
+}
+
+export function HeroSpline({ onLoad }: HeroSplineProps) {
     const handleScroll = () => {
         document.getElementById("contact")?.scrollIntoView({
             behavior: "smooth",
@@ -16,6 +20,7 @@ export function HeroSpline() {
                     className="w-full h-full"
                     scene="animations/happy_robot_button.spline"
                     onClick={handleScroll}
+                    onLoad={onLoad}
                 />
             </div>
         </div>
