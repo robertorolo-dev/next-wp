@@ -504,6 +504,10 @@ export async function getAllPortfolioCategories(): Promise<Category[]> {
   );
 }
 
+export async function getPortfolioCategoryById(id: number): Promise<Category> {
+  return wordpressFetch<Category>(`/wp-json/wp/v2/portfolio-category/${id}`);
+}
+
 export async function getPortfolioItemsPaginated(
   page: number = 1,
   per_page: number = 9,

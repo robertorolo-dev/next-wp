@@ -6,6 +6,9 @@ import {
   searchAuthors,
   searchTags,
   searchCategories,
+  getCategoryById,
+  getTagById,
+  getAuthorById,
 } from "@/lib/wordpress";
 
 import {
@@ -28,11 +31,57 @@ import { BreadcrumbJsonLd } from "next-seo";
 import { siteConfig } from "@/site.config";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 
-export const metadata: Metadata = getMetadata(undefined, {
-  title: "Blog",
-  description: "Read our latest news and articles on web development.",
-  path: "/posts",
-});
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    author?: string;
+    tag?: string;
+    category?: string;
+    page?: string;
+    search?: string;
+  }>;
+}): Promise<Metadata> {
+  const { author, tag, category, page, search } = await searchParams;
+
+  let title = "Blog";
+  let description = "Read our latest news and articles on web development.";
+  let path = "/posts";
+
+  if (category) {
+    try {
+      const cat = await getCategoryById(parseInt(category));
+      title = `${cat.name} Posts`;
+      path = `/posts?category=${category}`;
+    } catch (e) { }
+  } else if (tag) {
+    try {
+      const t = await getTagById(parseInt(tag));
+      title = `Posts tagged "${t.name}"`;
+      path = `/posts?tag=${tag}`;
+    } catch (e) { }
+  } else if (author) {
+    try {
+      const a = await getAuthorById(parseInt(author));
+      title = `Posts by ${a.name}`;
+      path = `/posts?author=${author}`;
+    } catch (e) { }
+  } else if (search) {
+    title = `Search results for "${search}"`;
+    path = `/posts?search=${search}`;
+  }
+
+  // Handle pagination in canonical URL if page > 1
+  if (page && parseInt(page) > 1) {
+    path += (path.includes("?") ? "&" : "?") + `page=${page}`;
+  }
+
+  return getMetadata(undefined, {
+    title,
+    description,
+    path,
+  });
+}
 
 export const dynamic = "auto";
 export const revalidate = 600;

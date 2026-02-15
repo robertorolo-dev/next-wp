@@ -1,6 +1,7 @@
 import {
     getPortfolioItemsPaginated,
     getAllPortfolioCategories,
+    getPortfolioCategoryById,
 } from "@/lib/wordpress";
 
 import {
@@ -23,11 +24,44 @@ import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { BreadcrumbJsonLd } from "next-seo";
 import { siteConfig } from "@/site.config";
 
-export const metadata: Metadata = getMetadata(undefined, {
-    title: "Portfolio",
-    description: "Browse our latest projects and web development work.",
-    path: "/portfolio",
-});
+export async function generateMetadata({
+    searchParams,
+}: {
+    searchParams: Promise<{
+        page?: string;
+        category?: string;
+        search?: string;
+    }>;
+}): Promise<Metadata> {
+    const { page, category, search } = await searchParams;
+
+    let title = "Portfolio";
+    let description = "Browse our latest projects and web development work.";
+    let path = "/portfolio";
+
+    if (category) {
+        try {
+            const cat = await getPortfolioCategoryById(parseInt(category));
+            title = `${cat.name} Projects`;
+            description = `Browse our ${cat.name} projects and case studies.`;
+            path = `/portfolio?category=${category}`;
+        } catch (e) { }
+    } else if (search) {
+        title = `Search results for "${search}"`;
+        path = `/portfolio?search=${search}`;
+    }
+
+    // Handle pagination
+    if (page && parseInt(page) > 1) {
+        path += (path.includes("?") ? "&" : "?") + `page=${page}`;
+    }
+
+    return getMetadata(undefined, {
+        title,
+        description,
+        path,
+    });
+}
 
 export const dynamic = "auto";
 export const revalidate = 600;

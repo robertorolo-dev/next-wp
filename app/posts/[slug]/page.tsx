@@ -35,7 +35,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
-  return getMetadata(post, { type: "article", path: `/posts/${slug}` });
+  if (!post) {
+    return {
+      title: "Post Not Found",
+    };
+  }
+
+  return getMetadata(post, { type: "article", path: `/posts/${post.slug}` });
 }
 
 export default async function Page({

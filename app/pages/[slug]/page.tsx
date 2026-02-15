@@ -29,7 +29,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const page = await getPageBySlug(slug);
 
-  return getMetadata(page, { type: "article", path: `/pages/${slug}` });
+  if (!page) {
+    return {
+      title: "Page Not Found",
+    };
+  }
+
+  return getMetadata(page, { type: "article", path: `/pages/${page.slug}` });
 }
 
 export default async function Page({

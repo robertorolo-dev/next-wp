@@ -31,7 +31,13 @@ export async function generateMetadata({
     const { slug } = await params;
     const item = await getPortfolioBySlug(slug);
 
-    return getMetadata(item, { type: "article", path: `/portfolio/${slug}` });
+    if (!item) {
+        return {
+            title: "Project Not Found",
+        };
+    }
+
+    return getMetadata(item, { type: "article", path: `/portfolio/${item.slug}` });
 }
 
 export default async function Page({
