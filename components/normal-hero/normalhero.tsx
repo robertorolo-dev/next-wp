@@ -9,13 +9,14 @@ export function NormalHero() {
             <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
                 <div className="space-y-6">
                     <h1 className="text-[42px] leading-[50px] md:text-[72px] font-bold md:leading-[85px]">
-                        We&apos;re <span className="bg-[#FF6B7A] text-white px-3 py-1 inline-block">KumoCode</span>, a Web Development
-                        Agency Building <span className="bg-[#2F81F7] text-white px-3 py-1 inline-block">Digital Excellence</span>
+                        <span className="bg-[#FF6B7A] text-white px-3 py-1 inline-block">Web Development</span> &amp;{" "}
+                        <span className="bg-[#2F81F7] text-white px-3 py-1 inline-block">Digital Solutions</span>{" "}
+                        in South Africa
                     </h1>
 
                     <p className="text-[#393939] text-[16px] md:text-[18px] font-medium leading-[28px] md:leading-[30px] max-w-xl">
-                        We craft exceptional web experiences with modern technologies, turning your vision into powerful digital
-                        solutions that drive results and delight users.
+                        KumoCode is a South African web development agency crafting high-performance websites and custom digital
+                        solutions that help businesses across South Africa grow, convert, and scale online.
                     </p>
 
                     <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-7 pt-4">
