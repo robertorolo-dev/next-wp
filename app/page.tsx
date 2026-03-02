@@ -18,8 +18,8 @@ import { getMetadata } from "@/lib/seo";
 import { siteConfig } from "@/site.config";
 
 export const metadata: Metadata = getMetadata(undefined, {
-  title: "Web Development & Digital Solutions South Africa | Kumocode",
-  description: "Kumocode is a South African web development agency building high-performance, SEO-friendly websites and custom digital solutions. Fast, secure, and built for growth.",
+  title: "Web Development Agency South Africa | WordPress & Shopify | Kumocode",
+  description: "Kumocode is a South African web development agency building high-performance WordPress, Shopify, and custom websites. Fast, SEO-optimised, and built for growth.",
   path: "/",
 });
 
@@ -32,21 +32,40 @@ const localBusinessSchema = {
   image: `${siteConfig.site_domain}/opengraph-image.png`,
   description:
     "Kumocode is a South African web development agency crafting high-performance websites and custom digital solutions for businesses across South Africa.",
-  areaServed: {
-    "@type": "Country",
-    name: "South Africa",
-  },
+  areaServed: [
+    { "@type": "City", name: "Cape Town" },
+    { "@type": "City", name: "Johannesburg" },
+    { "@type": "City", name: "Pretoria" },
+    { "@type": "City", name: "Durban" },
+    { "@type": "City", name: "Port Elizabeth" },
+    { "@type": "Country", name: "South Africa" },
+  ],
   address: {
     "@type": "PostalAddress",
     addressCountry: "ZA",
   },
-  sameAs: ["https://www.kumocode.co.za"],
+  sameAs: [
+    "https://www.kumocode.co.za",
+    "https://kumocode.co.za",
+  ],
   serviceType: [
+    "WordPress Development",
+    "Shopify Development",
     "Web Development",
     "Software Development",
     "UI/UX Design",
     "E-commerce Solutions",
     "SEO & Digital Marketing",
+    "Website Maintenance",
+  ],
+  knowsAbout: [
+    "WordPress",
+    "Shopify",
+    "WooCommerce",
+    "Next.js",
+    "SEO",
+    "Web Performance Optimization",
+    "E-commerce Development",
   ],
 };
 

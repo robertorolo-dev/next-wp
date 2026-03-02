@@ -74,12 +74,13 @@ export default async function Page({
       <ArticleJsonLd
         url={`${siteConfig.site_domain}/posts/${post.slug}`}
         headline={stripHtml(post.title.rendered)}
-        image={[featuredMedia?.source_url || ""]}
+        image={[featuredMedia?.source_url || `${siteConfig.site_domain}/opengraph-image.png`]}
         datePublished={post.date}
         dateModified={post.modified}
         author={[
           {
             name: author.name,
+            url: `${siteConfig.site_domain}/posts/authors`,
           },
         ]}
         publisher={{
@@ -89,6 +90,7 @@ export default async function Page({
           },
         }}
         description={stripHtml(post.excerpt.rendered)}
+        isAccessibleForFree={true}
       />
       <BreadcrumbJsonLd
         items={[

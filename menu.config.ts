@@ -1,6 +1,8 @@
 // Define the menu items
 export const mainMenu = {
   home: "/",
+  wordpress: "/wordpress-development",
+  shopify: "/shopify-development",
   portfolio: "/portfolio",
   blog: "/posts",
 };

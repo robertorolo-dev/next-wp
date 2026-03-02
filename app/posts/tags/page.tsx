@@ -8,11 +8,14 @@ export const revalidate = 3600;
 
 import { getMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = getMetadata(undefined, {
-  title: "All Tags",
-  description: "Browse all tags of our blog posts",
-  path: "/posts/tags",
-});
+export const metadata: Metadata = {
+  ...getMetadata(undefined, {
+    title: "All Tags",
+    description: "Browse all tags of our blog posts",
+    path: "/posts/tags",
+  }),
+  robots: "noindex, follow",
+};
 
 export default async function Page() {
   const tags = await getAllTags();

@@ -8,11 +8,14 @@ export const revalidate = 3600;
 
 import { getMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = getMetadata(undefined, {
-  title: "All Categories",
-  description: "Browse all categories of our blog posts",
-  path: "/posts/categories",
-});
+export const metadata: Metadata = {
+  ...getMetadata(undefined, {
+    title: "All Categories",
+    description: "Browse all categories of our blog posts",
+    path: "/posts/categories",
+  }),
+  robots: "noindex, follow",
+};
 
 export default async function Page() {
   const categories = await getAllCategories();

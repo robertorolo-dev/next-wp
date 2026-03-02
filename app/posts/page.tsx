@@ -44,8 +44,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { author, tag, category, page, search } = await searchParams;
 
-  let title = "Blog";
-  let description = "Read our latest news and articles on web development.";
+  let title = "Web Development Blog | WordPress, Shopify & SEO Tips";
+  let description = "Expert web development tips, Shopify guides, WordPress advice, and SEO strategies from Kumocode — South Africa's web development agency.";
   let path = "/posts";
 
   if (category) {
@@ -151,7 +151,7 @@ export default async function Page({
           </div>
           <div className="space-y-8">
             <Prose>
-              <h2>All Posts</h2>
+              <h2>Web Development Blog: WordPress, Shopify &amp; SEO Insights</h2>
               <p className="text-muted-foreground">
                 {total} {total === 1 ? "post" : "posts"} found
                 {search && " matching your search"}
