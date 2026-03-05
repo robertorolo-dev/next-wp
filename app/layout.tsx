@@ -167,7 +167,7 @@ const Footer = async () => {
         </Container>
         <Container className="border-t not-prose flex flex-col md:flex-row md:gap-2 gap-6 justify-between md:items-center">
           <p className="text-muted-foreground">
-            &copy; <a href="https://kumocode.co.za">Kumocode.co.za</a>. All rights reserved.
+            &copy; <a href="https://www.kumocode.co.za">Kumocode.co.za</a>. All rights reserved.
             2026.
           </p>
         </Container>
