@@ -17,6 +17,8 @@ import {
     CheckCircle2,
     FileText,
 } from "lucide-react";
+import { getPostsByCategorySlug, getPostsPaginated } from "@/lib/wordpress";
+import { stripHtml } from "@/lib/utils";
 
 export const metadata: Metadata = getMetadata(undefined, {
     title: "WordPress Development South Africa | Custom WordPress Websites | Kumocode",
@@ -146,7 +148,17 @@ const services = [
     },
 ];
 
-export default function WordPressDevelopmentPage() {
+export default async function WordPressDevelopmentPage() {
+    let recentPosts: any[] = [];
+    try {
+        const categoryPosts = await getPostsByCategorySlug("wordpress");
+        recentPosts = categoryPosts.slice(0, 3);
+    } catch {
+        const fallback = await getPostsPaginated(1, 3);
+        recentPosts = fallback.data;
+    }
+
+
     return (
         <>
             <script
@@ -191,7 +203,7 @@ export default function WordPressDevelopmentPage() {
                             </p>
                             <div className="flex flex-wrap gap-4">
                                 <Link
-                                    href="/#contact"
+                                    href="#contact"
                                     className="bg-[#FFC224] border-[3px] border-black text-black font-black px-8 py-4 rounded-2xl shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[3px] hover:translate-y-[3px] transition-all"
                                 >
                                     Get a Free Quote
@@ -339,7 +351,7 @@ export default function WordPressDevelopmentPage() {
                                 quote.
                             </p>
                             <Link
-                                href="/#contact"
+                                href="#contact"
                                 className="mt-6 block text-center bg-black text-white font-black px-6 py-4 rounded-xl hover:bg-[#FFC224] hover:text-black transition-colors"
                             >
                                 Get a Custom Quote →
@@ -381,27 +393,14 @@ export default function WordPressDevelopmentPage() {
                         WordPress Resources
                     </h2>
                     <div className="grid md:grid-cols-3 gap-6">
-                        {[
-                            {
-                                title: "The Complete Guide to Hiring a WordPress Developer",
-                                href: "/posts/the-complete-guide-to-hiring-a-wordpress-developer-12-must-have-qualities",
-                            },
-                            {
-                                title: "WordPress Website Cost in 2026: Complete Pricing Breakdown",
-                                href: "/posts/wordpress-website-cost-in-2026-complete-pricing-breakdown",
-                            },
-                            {
-                                title: "Why Your WordPress Site Is Slow and How to Fix It",
-                                href: "/posts/why-your-wordpress-site-is-slow-and-how-developers-actually-fix-it-in-2026",
-                            },
-                        ].map((article, i) => (
+                        {recentPosts.map((post, i) => (
                             <Link
                                 key={i}
-                                href={article.href}
+                                href={`/blog/${post.slug}`}
                                 className="flex items-center gap-3 border-[3px] border-black rounded-[20px] p-6 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all font-bold text-[#0B0B0B]"
                             >
                                 <FileText size={20} className="flex-shrink-0 text-[#FFC224]" strokeWidth={2.5} />
-                                <span>{article.title} →</span>
+                                <span className="line-clamp-2">{stripHtml(post.title.rendered)} →</span>
                             </Link>
                         ))}
                     </div>

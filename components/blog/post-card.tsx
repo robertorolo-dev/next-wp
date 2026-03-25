@@ -14,7 +14,7 @@ export function PostCard({ post }: { post: any }) {
     year: "numeric",
   });
 
-  const title = stripHtml(post.title?.rendered || "Untitled Post");
+  const title = stripHtml(post.title?.rendered || "Untitled Article");
   const excerpt = post.excerpt?.rendered
     ? stripHtml(post.excerpt.rendered).split(" ").slice(0, 20).join(" ") + "..."
     : "No excerpt available";
@@ -55,7 +55,7 @@ export function PostCard({ post }: { post: any }) {
         </p>
 
         <Link
-          href={`/posts/${post.slug}`}
+          href={`/blog/${post.slug}`}
           className="flex items-center gap-2 font-bold text-[#0B0B0B] hover:gap-3 transition-all text-sm mt-auto w-fit"
         >
           Read article

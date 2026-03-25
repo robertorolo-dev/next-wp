@@ -63,7 +63,7 @@ export async function ArticlesSection() {
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">Articles & News</h2>
-                    <Link href="/posts">
+                    <Link href="/blog">
                         <Button
                             variant="outline"
                             className="border-[3px] border-black rounded-xl px-4 md:px-6 py-4 md:py-6 hover:bg-gray-50 bg-white font-semibold text-sm md:text-base w-full sm:w-auto cursor-pointer"
@@ -77,7 +77,7 @@ export async function ArticlesSection() {
                 <div className="grid md:grid-cols-[0.9fr_1.1fr] gap-6">
                     {/* Large featured article card */}
                     {featuredPost && (
-                        <Link href={`/posts/${featuredPost.slug}`} className="h-full">
+                        <Link href={`/blog/${featuredPost.slug}`} className="h-full">
                             <div className="group flex flex-col h-full bg-white border-[3px] border-black rounded-3xl overflow-hidden hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300">
                                 <div className="bg-[#EDEDED] relative min-h-[220px] md:min-h-[320px] m-3 md:m-4 rounded-2xl overflow-hidden">
                                     {getEmbeddedCategories(featuredPost)[0] && (
@@ -148,7 +148,7 @@ export async function ArticlesSection() {
                     {/* Right side - Two smaller article cards */}
                     <div className="flex flex-col gap-6">
                         {smallerPosts.map((post, index) => (
-                            <Link key={post.id} href={`/posts/${post.slug}`} className="flex flex-col flex-1">
+                            <Link key={post.id} href={`/blog/${post.slug}`} className="flex flex-col flex-1">
                                 <div className="group flex-1 bg-white border-[3px] border-black rounded-3xl overflow-hidden hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300">
                                     <div className="flex flex-col sm:flex-row h-full">
                                         {/* Image area */}

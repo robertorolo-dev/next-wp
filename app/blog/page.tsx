@@ -21,9 +21,9 @@ import {
 } from "@/components/ui/pagination";
 
 import { Section, Container, Prose } from "@/components/craft";
-import { PostCard } from "@/components/posts/post-card";
-import { FilterPosts } from "@/components/posts/filter";
-import { SearchInput } from "@/components/posts/search-input";
+import { PostCard } from "@/components/blog/post-card";
+import { FilterPosts } from "@/components/blog/filter";
+import { SearchInput } from "@/components/blog/search-input";
 
 import type { Metadata } from "next";
 import { getMetadata } from "@/lib/seo";
@@ -46,29 +46,29 @@ export async function generateMetadata({
 
   let title = "Web Development Blog | WordPress, Shopify & SEO Tips";
   let description = "Expert web development tips, Shopify guides, WordPress advice, and SEO strategies from Kumocode — South Africa's web development agency.";
-  let path = "/posts";
+  let path = "/blog";
 
   if (category) {
     try {
       const cat = await getCategoryById(parseInt(category));
-      title = `${cat.name} Posts`;
-      path = `/posts?category=${category}`;
+      title = `${cat.name} Blog`;
+      path = `/blog?category=${category}`;
     } catch (e) { }
   } else if (tag) {
     try {
       const t = await getTagById(parseInt(tag));
-      title = `Posts tagged "${t.name}"`;
-      path = `/posts?tag=${tag}`;
+      title = `Blog tagged "${t.name}"`;
+      path = `/blog?tag=${tag}`;
     } catch (e) { }
   } else if (author) {
     try {
       const a = await getAuthorById(parseInt(author));
-      title = `Posts by ${a.name}`;
-      path = `/posts?author=${author}`;
+      title = `Blog by ${a.name}`;
+      path = `/blog?author=${author}`;
     } catch (e) { }
   } else if (search) {
     title = `Search results for "${search}"`;
-    path = `/posts?search=${search}`;
+    path = `/blog?search=${search}`;
   }
 
   // Handle pagination in canonical URL if page > 1
@@ -123,7 +123,7 @@ export default async function Page({
     if (author) params.set("author", author);
     if (tag) params.set("tag", tag);
     if (search) params.set("search", search);
-    return `/posts${params.toString() ? `?${params.toString()}` : ""}`;
+    return `/blog${params.toString() ? `?${params.toString()}` : ""}`;
   };
 
   return (
@@ -136,7 +136,7 @@ export default async function Page({
           },
           {
             name: "Blog",
-            item: `${siteConfig.site_domain}/posts`,
+            item: `${siteConfig.site_domain}/blog`,
           },
         ]}
       />
@@ -153,7 +153,7 @@ export default async function Page({
             <Prose>
               <h2>Web Development Blog: WordPress, Shopify &amp; SEO Insights</h2>
               <p className="text-muted-foreground">
-                {total} {total === 1 ? "post" : "posts"} found
+                {total} {total === 1 ? "article" : "articles"} found
                 {search && " matching your search"}
               </p>
             </Prose>
@@ -179,7 +179,7 @@ export default async function Page({
               </div>
             ) : (
               <div className="h-24 w-full border rounded-lg bg-accent/25 flex items-center justify-center">
-                <p>No posts found</p>
+                <p>No articles found</p>
               </div>
             )}
 

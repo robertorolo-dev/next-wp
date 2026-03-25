@@ -4,11 +4,11 @@ export const mainMenu = {
   wordpress: "/wordpress-development",
   shopify: "/shopify-development",
   portfolio: "/portfolio",
-  blog: "/posts",
+  blog: "/blog",
 };
 
 export const contentMenu = {
-  categories: "/posts/categories",
-  tags: "/posts/tags",
-  authors: "/posts/authors",
+  categories: "/blog/categories",
+  tags: "/blog/tags",
+  authors: "/blog/authors",
 };

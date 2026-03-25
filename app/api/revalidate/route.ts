@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
         if (contentId) {
           revalidateTag(`post-${contentId}`, { expire: 0 });
         }
-        revalidatePath("/posts", "page");
+        revalidatePath("/blog", "page");
       } else if (contentType === "page") {
         revalidateTag("pages", { expire: 0 });
         if (contentId) {
@@ -82,21 +82,21 @@ export async function POST(request: NextRequest) {
           revalidateTag(`category-${contentId}`, { expire: 0 });
           revalidateTag(`posts-category-${contentId}`, { expire: 0 });
         }
-        revalidatePath("/posts", "page");
+        revalidatePath("/blog", "page");
       } else if (contentType === "tag") {
         revalidateTag("tags", { expire: 0 });
         if (contentId) {
           revalidateTag(`tag-${contentId}`, { expire: 0 });
           revalidateTag(`posts-tag-${contentId}`, { expire: 0 });
         }
-        revalidatePath("/posts", "page");
+        revalidatePath("/blog", "page");
       } else if (contentType === "author" || contentType === "user") {
         revalidateTag("authors", { expire: 0 });
         if (contentId) {
           revalidateTag(`author-${contentId}`, { expire: 0 });
           revalidateTag(`posts-author-${contentId}`, { expire: 0 });
         }
-        revalidatePath("/posts", "page");
+        revalidatePath("/blog", "page");
       } else if (contentType === "media") {
         revalidateTag("wordpress", { expire: 0 });
         revalidateTag("site-options", { expire: 0 });

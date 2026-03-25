@@ -37,11 +37,11 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Post Not Found",
+      title: "Blog Article Not Found",
     };
   }
 
-  return getMetadata(post, { type: "article", path: `/posts/${post.slug}` });
+  return getMetadata(post, { type: "article", path: `/blog/${post.slug}` });
 }
 
 export default async function Page({
@@ -66,13 +66,14 @@ export default async function Page({
     year: "numeric",
   });
   const category = await getCategoryById(post.categories[0]);
-  const postUrl = `${siteConfig.site_domain}/posts/${post.slug}`;
+  const postUrl = `${siteConfig.site_domain}/blog/${post.slug}`;
   const siteOptions = await getSiteOptions();
 
   return (
     <>
       <ArticleJsonLd
-        url={`${siteConfig.site_domain}/posts/${post.slug}`}
+        type="BlogPosting"
+        url={`${siteConfig.site_domain}/blog/${post.slug}`}
         headline={stripHtml(post.title.rendered)}
         image={[featuredMedia?.source_url || `${siteConfig.site_domain}/opengraph-image.png`]}
         datePublished={post.date}
@@ -80,7 +81,7 @@ export default async function Page({
         author={[
           {
             name: author.name,
-            url: `${siteConfig.site_domain}/posts/authors`,
+            url: `${siteConfig.site_domain}/blog/authors`,
           },
         ]}
         publisher={{
@@ -100,11 +101,11 @@ export default async function Page({
           },
           {
             name: "Blog",
-            item: `${siteConfig.site_domain}/posts`,
+            item: `${siteConfig.site_domain}/blog`,
           },
           {
             name: stripHtml(post.title.rendered),
-            item: `${siteConfig.site_domain}/posts/${post.slug}`,
+            item: `${siteConfig.site_domain}/blog/${post.slug}`,
           },
         ]}
       />
@@ -113,7 +114,7 @@ export default async function Page({
           <div className="mb-12">
             <Breadcrumbs
               items={[
-                { label: "Blog", href: "/posts" },
+                { label: "Blog", href: "/blog" },
               ]}
             />
           </div>
@@ -172,7 +173,7 @@ export default async function Page({
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       <Link
-                        href={`/posts/?category=${category.id}`}
+                        href={`/blog/?category=${category.id}`}
                         className="bg-gray-100 text-black border-2 border-black px-4 py-2 rounded-xl text-xs font-bold hover:bg-[#FFC224] transition-colors"
                       >
                         {category.name}
@@ -181,7 +182,7 @@ export default async function Page({
                   </div>
 
                   <div className="border-[3px] border-black rounded-[32px] p-8 bg-[#FDB927]/10 border-dashed">
-                    <h3 className="text-lg font-black mb-4 uppercase tracking-tight">Share this post</h3>
+                    <h3 className="text-lg font-black mb-4 uppercase tracking-tight">Share this article</h3>
                     <div className="space-y-6">
                       <SocialShare url={postUrl} title={stripHtml(post.title.rendered)} />
                     </div>

@@ -17,20 +17,20 @@ export async function GET() {
     // 1. Static URLs
     const urls = [
         { url: `${baseUrl}`, lastMod: new Date().toISOString(), priority: "1.0", changeFreq: "daily" },
-        { url: `${baseUrl}/posts`, lastMod: posts[0] ? new Date(posts[0].modified).toISOString() : new Date().toISOString(), priority: "0.9", changeFreq: "daily" },
+        { url: `${baseUrl}/blog`, lastMod: posts[0] ? new Date(posts[0].modified).toISOString() : new Date().toISOString(), priority: "0.9", changeFreq: "daily" },
         { url: `${baseUrl}/portfolio`, lastMod: portfolioItems[0] ? new Date(portfolioItems[0].modified).toISOString() : new Date().toISOString(), priority: "0.9", changeFreq: "weekly" },
         { url: `${baseUrl}/wordpress-development`, lastMod: new Date().toISOString(), priority: "0.9", changeFreq: "monthly" },
         { url: `${baseUrl}/shopify-development`, lastMod: new Date().toISOString(), priority: "0.9", changeFreq: "monthly" },
         { url: `${baseUrl}/pages`, lastMod: new Date().toISOString(), priority: "0.5", changeFreq: "monthly" },
-        { url: `${baseUrl}/posts/authors`, lastMod: new Date().toISOString(), priority: "0.4", changeFreq: "monthly" },
-        { url: `${baseUrl}/posts/categories`, lastMod: new Date().toISOString(), priority: "0.1", changeFreq: "monthly" },
-        { url: `${baseUrl}/posts/tags`, lastMod: new Date().toISOString(), priority: "0.1", changeFreq: "monthly" },
+        { url: `${baseUrl}/blog/authors`, lastMod: new Date().toISOString(), priority: "0.4", changeFreq: "monthly" },
+        { url: `${baseUrl}/blog/categories`, lastMod: new Date().toISOString(), priority: "0.1", changeFreq: "monthly" },
+        { url: `${baseUrl}/blog/tags`, lastMod: new Date().toISOString(), priority: "0.1", changeFreq: "monthly" },
     ];
 
     // 2. Dynamic URLs - Posts
     posts.forEach((post) => {
         urls.push({
-            url: `${baseUrl}/posts/${post.slug}`,
+            url: `${baseUrl}/blog/${post.slug}`,
             lastMod: new Date(post.modified).toISOString(),
             priority: "0.7",
             changeFreq: "weekly",
