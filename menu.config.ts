@@ -5,6 +5,7 @@ export const mainMenu = {
   shopify: "/shopify-development",
   portfolio: "/portfolio",
   blog: "/blog",
+  audit: "/free-website-speed-test",
 };
 
 export const contentMenu = {
