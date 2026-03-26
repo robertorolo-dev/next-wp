@@ -138,8 +138,8 @@ export function WebsiteSpeedTest() {
                         <input 
                           type="checkbox" 
                           className="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary accent-primary cursor-pointer"
-                          checked={field.value}
-                          onChange={field.onChange}
+                          checked={!!field.value}
+                          onChange={(e) => field.onChange(e.target.checked)}
                           disabled={analyzing}
                         />
                       </FormControl>
