@@ -134,7 +134,7 @@ const Footer = async () => {
   return (
     <footer>
       <Section>
-        <Container className="grid md:grid-cols-[1.5fr_0.5fr_0.5fr] gap-12">
+        <Container className="grid md:grid-cols-[1fr_0.5fr_0.5fr_0.5fr] gap-8">
           <div className="flex flex-col gap-6 not-prose">
             <Link href="/">
               <Image
@@ -151,6 +151,12 @@ const Footer = async () => {
           <div className="flex flex-col gap-4">
             <h5 className="font-bold uppercase tracking-widest text-sm">Follow Us</h5>
             <SocialFollow links={siteOptions?.social_links} />
+          </div>
+          <div className="flex flex-col gap-2 text-sm">
+            <h5 className="font-bold uppercase tracking-widest text-sm mb-2">Service Areas</h5>
+            <Link className="hover:underline underline-offset-4 font-medium" href="/web-development-cape-town">Cape Town</Link>
+            <Link className="hover:underline underline-offset-4 font-medium" href="/web-development-johannesburg">Johannesburg</Link>
+            <Link className="hover:underline underline-offset-4 font-medium" href="/web-development-durban">Durban</Link>
           </div>
           <div className="flex flex-col gap-2 text-sm">
             <h5 className="font-bold uppercase tracking-widest text-sm mb-2">Links</h5>

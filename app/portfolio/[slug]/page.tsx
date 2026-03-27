@@ -148,7 +148,7 @@ export default async function Page({
                                 <Image
                                     className="w-full h-full object-cover"
                                     src={illustration}
-                                    alt={item.title.rendered}
+                                    alt={item.acf?.project_illustration?.alt || `${stripHtml(item.title.rendered)} web development project in South Africa`}
                                     fill
                                     priority
                                 />

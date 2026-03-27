@@ -34,6 +34,9 @@ export async function PortfolioCard({
 
     const illustration = item.acf?.project_illustration?.url;
     const caseStudyLink = `/portfolio/${item.slug}`;
+    
+    // SEO-friendly alt text
+    const altText = item.acf?.project_illustration?.alt || `${title} - ${tag} development project in South Africa`;
 
     const containerClasses = cn(
         "group border-[3px] border-black rounded-[32px] overflow-hidden hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all flex flex-col",
@@ -81,7 +84,7 @@ export async function PortfolioCard({
                 {illustration ? (
                     <Image
                         src={illustration}
-                        alt={title}
+                        alt={altText}
                         fill
                         placeholder="blur"
                         blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN8/x8AAuMB8f6Pdx8AAAAASUVORK5CYII="
