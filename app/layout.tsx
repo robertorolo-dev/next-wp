@@ -173,6 +173,11 @@ const Footer = async () => {
             &copy; <a href="https://www.kumocode.co.za">Kumocode.co.za</a>. All rights reserved.
             2026.
           </p>
+          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+            <Link className="hover:underline underline-offset-4" href="/privacy-policy">Privacy Policy</Link>
+            <Link className="hover:underline underline-offset-4" href="/terms-and-conditions">Terms &amp; Conditions</Link>
+            <Link className="hover:underline underline-offset-4" href="/cookie-policy">Cookie Policy</Link>
+          </div>
         </Container>
       </Section>
     </footer>

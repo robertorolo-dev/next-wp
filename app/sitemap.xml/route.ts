@@ -25,6 +25,10 @@ export async function GET() {
         { url: `${baseUrl}/blog/authors`, lastMod: new Date().toISOString(), priority: "0.4", changeFreq: "monthly" },
         { url: `${baseUrl}/blog/categories`, lastMod: new Date().toISOString(), priority: "0.1", changeFreq: "monthly" },
         { url: `${baseUrl}/blog/tags`, lastMod: new Date().toISOString(), priority: "0.1", changeFreq: "monthly" },
+        // Legal pages
+        { url: `${baseUrl}/privacy-policy`, lastMod: "2026-01-01T00:00:00.000Z", priority: "0.3", changeFreq: "yearly" },
+        { url: `${baseUrl}/terms-and-conditions`, lastMod: "2026-01-01T00:00:00.000Z", priority: "0.3", changeFreq: "yearly" },
+        { url: `${baseUrl}/cookie-policy`, lastMod: "2026-01-01T00:00:00.000Z", priority: "0.3", changeFreq: "yearly" },
     ];
 
     // 2. Dynamic URLs - Posts
