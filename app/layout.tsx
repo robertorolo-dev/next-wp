@@ -37,9 +37,6 @@ export const metadata: Metadata = {
   description: defaultSeoConfig.description,
   openGraph: defaultSeoConfig.openGraph,
   twitter: defaultSeoConfig.twitter,
-  alternates: {
-    canonical: "/",
-  },
 };
 
 import { OrganizationJsonLd } from "next-seo";

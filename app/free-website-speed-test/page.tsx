@@ -2,19 +2,13 @@ import { Metadata } from 'next';
 import { Section, Container } from '@/components/craft';
 import { WebsiteSpeedTest } from '@/components/speed-test/website-speed-test';
 
-export const metadata: Metadata = {
+import { getMetadata } from '@/lib/seo';
+
+export const metadata: Metadata = getMetadata(undefined, {
   title: 'Free Website Speed Test & SEO Audit | Kumocode',
   description: 'Test your website speed, SEO, and performance for free. Uncover hidden issues that are costing you customers and get actionable insights.',
-  alternates: {
-    canonical: '/free-website-speed-test',
-  },
-  openGraph: {
-    title: 'Free Website Speed Test & SEO Audit',
-    description: 'Find out exactly why your website is losing traffic. Run a free performance and SEO audit powered by Google Lighthouse instantly.',
-    url: 'https://kumocode.co.za/free-website-speed-test',
-    type: 'website',
-  },
-};
+  path: '/free-website-speed-test',
+});
 
 export default function FreeWebsiteSpeedTestPage() {
   const jsonLd = {

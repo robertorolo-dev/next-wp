@@ -60,7 +60,18 @@ export function getMetadata(
         ogImage = wpItem._embedded["wp:featuredmedia"][0].source_url;
     }
 
-    const url = options.path ? `${baseUrl}${options.path}` : (item?.link ? item.link : baseUrl);
+    let url = baseUrl;
+    if (options.path) {
+        url = `${baseUrl}${options.path}`;
+    } else if (item?.link) {
+        try {
+            // Ensure canonical URL points to the Next.js frontend domain, not the headless WP backend
+            const parsedLink = new URL(item.link);
+            url = `${baseUrl}${parsedLink.pathname}`;
+        } catch {
+            url = baseUrl;
+        }
+    }
 
     return {
         title: finalTitle,
