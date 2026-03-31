@@ -151,7 +151,7 @@ export default async function Page({
           </div>
           <div className="space-y-8">
             <Prose>
-              <h2>Web Development Blog: WordPress, Shopify &amp; SEO Insights</h2>
+              <h1>Web Development Blog: WordPress, Shopify &amp; SEO Insights</h1>
               <p className="text-muted-foreground">
                 {total} {total === 1 ? "article" : "articles"} found
                 {search && " matching your search"}
