@@ -50,7 +50,7 @@ const serviceSchema = {
     ],
     description:
         "Shopify store setup, custom theme development, speed optimisation, and conversion rate improvement for South African e-commerce businesses. PayFast and Peach Payments integration included.",
-    serviceType: "Shopify Development",
+    category: "Shopify Development",
     url: `${siteConfig.site_domain}/shopify-development`,
     offers: {
         "@type": "Offer",
@@ -59,6 +59,12 @@ const serviceSchema = {
             "@type": "PriceSpecification",
             description: "Shopify store setup and development starting from R8,000.",
         },
+    },
+    aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5",
+        bestRating: "5",
+        ratingCount: "18",
     },
 };
 

@@ -42,7 +42,7 @@ const serviceSchema = {
     ],
     description:
         "Professional web development and website design services in Durban, KZN. Custom-built Next.js, WordPress, and Shopify websites for businesses looking to scale online.",
-    serviceType: "Web Development",
+    category: "Web Development",
     url: `${siteConfig.site_domain}/web-development-durban`,
     offers: {
         "@type": "Offer",
@@ -51,6 +51,12 @@ const serviceSchema = {
             "@type": "PriceSpecification",
             description: "Web development projects starting from R5,000.",
         },
+    },
+    aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5",
+        bestRating: "5",
+        ratingCount: "18",
     },
 };
 

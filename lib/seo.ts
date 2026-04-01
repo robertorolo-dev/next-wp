@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { Post, Page, Portfolio } from "./wordpress.d";
+import { getRankMathHead } from "./wordpress";
 import { siteConfig } from "@/site.config";
 import { defaultSeoConfig } from "./seo-config";
 import { stripHtml } from "./utils";
@@ -30,11 +31,20 @@ export function getMetadata(
         siteConfig.site_description;
     const type = options.type || "website";
 
-    // 2. Handle WordPress SEO Plugin data (Yoast/RankMath) if available
+    // 2. Handle SEO Plugin data — supports both Rank Math and Yoast
     const wpItem = item as any;
     let ogImage = defaultSeoConfig.openGraph.images[0].url;
 
-    if (wpItem?.yoast_head_json) {
+    if (wpItem?.rank_math_title || wpItem?.rank_math_description) {
+        // Rank Math SEO (adds fields at root level of REST API response)
+        title = wpItem.rank_math_title || title;
+        description = wpItem.rank_math_description || description;
+        // Rank Math stores OG image in rank_math_og_content_image or via featured media
+        if (wpItem.rank_math_og_content_image) {
+            ogImage = wpItem.rank_math_og_content_image;
+        }
+    } else if (wpItem?.yoast_head_json) {
+        // Yoast SEO (nests data under yoast_head_json)
         const yoast = wpItem.yoast_head_json;
         title = yoast.title || title;
         description = yoast.description || description;
@@ -55,8 +65,9 @@ export function getMetadata(
     }
     const finalTitle = { absolute: title };
 
-    // 5. Featured Image Fallback
-    if (!wpItem?.yoast_head_json?.og_image && wpItem?._embedded?.["wp:featuredmedia"]?.[0]?.source_url) {
+    // 5. Featured Image Fallback (only if no SEO plugin provided an image)
+    const hasPluginImage = wpItem?.rank_math_og_content_image || wpItem?.yoast_head_json?.og_image;
+    if (!hasPluginImage && wpItem?._embedded?.["wp:featuredmedia"]?.[0]?.source_url) {
         ogImage = wpItem._embedded["wp:featuredmedia"][0].source_url;
     }
 
@@ -102,4 +113,88 @@ export function getMetadata(
             canonical: url,
         },
     };
+}
+
+/**
+ * Parses Rank Math's raw <head> HTML string into a Next.js Metadata object.
+ * Extracts title, description, canonical, robots, and OpenGraph tags dynamically. 
+ */
+export function parseRankMathHead(html: string, baseMetadata: Metadata = {}): Metadata {
+    const metadata: Metadata = { ...baseMetadata };
+
+    if (!html) return metadata;
+
+    const titleMatch = html.match(/<title>([^<]*)<\/title>/i);
+    if (titleMatch && titleMatch[1]) {
+        metadata.title = stripHtml(titleMatch[1]);
+    }
+
+    const descMatch = html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']*)["'][^>]*>/i) ||
+                      html.match(/<meta[^>]*content=["']([^"']*)["'][^>]*name=["']description["'][^>]*>/i);
+    if (descMatch && descMatch[1]) {
+        metadata.description = stripHtml(descMatch[1]);
+    }
+
+    const canonicalMatch = html.match(/<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']*)["'][^>]*>/i) ||
+                           html.match(/<link[^>]*href=["']([^"']*)["'][^>]*rel=["']canonical["'][^>]*>/i);
+    if (canonicalMatch && canonicalMatch[1]) {
+        metadata.alternates = { ...metadata.alternates, canonical: canonicalMatch[1] };
+    }
+
+    const robotsMatch = html.match(/<meta[^>]*name=["']robots["'][^>]*content=["']([^"']*)["'][^>]*>/i) ||
+                        html.match(/<meta[^>]*content=["']([^"']*)["'][^>]*name=["']robots["'][^>]*>/i);
+    if (robotsMatch && robotsMatch[1]) {
+        metadata.robots = robotsMatch[1];
+    }
+
+    const ogImageMatch = html.match(/<meta[^>]*property=["']og:image["'][^>]*content=["']([^"']*)["'][^>]*>/i) ||
+                         html.match(/<meta[^>]*content=["']([^"']*)["'][^>]*property=["']og:image["'][^>]*>/i);
+    if (ogImageMatch && ogImageMatch[1]) {
+        if (!metadata.openGraph) metadata.openGraph = {};
+        metadata.openGraph.images = [{ url: ogImageMatch[1] }];
+    }
+
+    const ogTitleMatch = html.match(/<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']*)["'][^>]*>/i) || html.match(/<meta[^>]*content=["']([^"']*)["'][^>]*property=["']og:title["'][^>]*>/i);
+    if (ogTitleMatch && ogTitleMatch[1]) {
+        if (!metadata.openGraph) metadata.openGraph = {};
+        metadata.openGraph.title = stripHtml(ogTitleMatch[1]);
+    }
+
+    const ogDescMatch = html.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']*)["'][^>]*>/i) || html.match(/<meta[^>]*content=["']([^"']*)["'][^>]*property=["']og:description["'][^>]*>/i);
+    if (ogDescMatch && ogDescMatch[1]) {
+        if (!metadata.openGraph) metadata.openGraph = {};
+        metadata.openGraph.description = stripHtml(ogDescMatch[1]);
+    }
+
+    return metadata;
+}
+
+/**
+ * Helper to fetch and parse Rank Math headless metadata 
+ * For 'wpUrlPath', pass the path of the post/page relative to WordPress, e.g. "/hello-world"
+ */
+export async function getRankMathMetadata(
+    wpUrlPath: string,
+    fallbackMetadata: Metadata = {}
+): Promise<Metadata> {
+    const baseUrl = process.env.WORDPRESS_URL;
+    if (!baseUrl) return fallbackMetadata;
+
+    let fullUrl = wpUrlPath;
+    if (!wpUrlPath.startsWith('http')) {
+        const formattedPath = wpUrlPath.startsWith('/') ? wpUrlPath : `/${wpUrlPath}`;
+        fullUrl = `${baseUrl.replace(/\/$/, '')}${formattedPath}`;
+    }
+    
+    let headHtml = await getRankMathHead(fullUrl);
+
+    if (!headHtml) return fallbackMetadata;
+
+    // Cleanly rewrite backend API domains into frontend domains, 
+    // ensuring canonical tags and OG links map correctly to Next.js
+    const cleanBaseUrl = baseUrl.replace(/\/$/, '');
+    const cleanSiteDomain = siteConfig.site_domain.replace(/\/$/, '');
+    headHtml = headHtml.replace(new RegExp(cleanBaseUrl, 'g'), cleanSiteDomain);
+    
+    return parseRankMathHead(headHtml, fallbackMetadata);
 }

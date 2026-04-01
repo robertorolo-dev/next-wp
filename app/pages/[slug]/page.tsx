@@ -6,8 +6,9 @@ import { stripHtml } from "@/lib/utils";
 
 import type { Metadata } from "next";
 
-import { getMetadata } from "@/lib/seo";
+import { getMetadata, getRankMathMetadata } from "@/lib/seo";
 import { BreadcrumbJsonLd } from "next-seo";
+import { RankMathSchema } from "@/components/seo/rank-math-schema";
 
 
 // Revalidate pages every hour
@@ -35,7 +36,8 @@ export async function generateMetadata({
     };
   }
 
-  return getMetadata(page, { type: "article", path: `/pages/${page.slug}` });
+  const fallback = getMetadata(page, { type: "article", path: `/pages/${page.slug}` });
+  return await getRankMathMetadata(`/pages/${page.slug}`, fallback);
 }
 
 export default async function Page({
@@ -52,18 +54,7 @@ export default async function Page({
 
   return (
     <>
-      <BreadcrumbJsonLd
-        items={[
-          {
-            name: "Home",
-            item: siteConfig.site_domain,
-          },
-          {
-            name: stripHtml(page.title.rendered),
-            item: `${siteConfig.site_domain}/pages/${page.slug}`,
-          },
-        ]}
-      />
+      <RankMathSchema wpUrlPath={`/pages/${page.slug}`} />
       <Section>
         <Container>
 

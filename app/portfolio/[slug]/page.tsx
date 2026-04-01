@@ -12,9 +12,10 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ExternalLink } from "lucide-react";
-import { ArticleJsonLd, BreadcrumbJsonLd } from "next-seo";
+import { BreadcrumbJsonLd } from "next-seo";
+import { RankMathSchema } from "@/components/seo/rank-math-schema";
 
-import { getMetadata } from "@/lib/seo";
+import { getMetadata, getRankMathMetadata } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { SocialShare } from "@/components/blog/social-share";
 import { SocialFollow } from "@/components/blog/social-follow";
@@ -37,7 +38,8 @@ export async function generateMetadata({
         };
     }
 
-    return getMetadata(item, { type: "article", path: `/portfolio/${item.slug}` });
+    const fallback = getMetadata(item, { type: "article", path: `/portfolio/${item.slug}` });
+    return await getRankMathMetadata(`/portfolio/${item.slug}`, fallback);
 }
 
 export default async function Page({
@@ -68,41 +70,7 @@ export default async function Page({
 
     return (
         <>
-            <ArticleJsonLd
-                url={`${siteConfig.site_domain}/portfolio/${item.slug}`}
-                headline={stripHtml(item.title.rendered)}
-                image={[illustration || ""]}
-                datePublished={item.date}
-                dateModified={item.modified}
-                author={[
-                    {
-                        name: siteConfig.site_name,
-                    },
-                ]}
-                publisher={{
-                    name: siteConfig.site_name,
-                    logo: {
-                        url: `${siteConfig.site_domain}/kumocode.png`,
-                    },
-                }}
-                description={item.acf?.project_description || stripHtml(item.excerpt.rendered)}
-            />
-            <BreadcrumbJsonLd
-                items={[
-                    {
-                        name: "Home",
-                        item: siteConfig.site_domain,
-                    },
-                    {
-                        name: "Portfolio",
-                        item: `${siteConfig.site_domain}/portfolio`,
-                    },
-                    {
-                        name: stripHtml(item.title.rendered),
-                        item: `${siteConfig.site_domain}/portfolio/${item.slug}`,
-                    },
-                ]}
-            />
+            <RankMathSchema wpUrlPath={`/portfolio/${item.slug}`} />
             <Section>
                 <Container className="max-w-[1600px] mx-auto">
                     <div className="mb-12">

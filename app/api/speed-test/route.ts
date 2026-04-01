@@ -159,7 +159,6 @@ export async function POST(request: NextRequest) {
             };
 
             await transporter.sendMail(mailOptions);
-            console.log('Lead notification email sent.');
         } catch (emailError) {
              console.error('Failed to send lead email:', emailError);
         }

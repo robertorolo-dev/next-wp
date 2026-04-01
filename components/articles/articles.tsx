@@ -29,7 +29,6 @@ function formatDate(dateString: string) {
 export async function ArticlesSection() {
     // Fetch only the latest 3 posts to optimize performance
     const posts = await getAllPosts({ per_page: 3 })
-    console.log(`[ArticlesSection] Fetched ${posts?.length || 0} posts`);
     const latestPosts = posts.slice(0, 3)
 
     // If no posts, show placeholder

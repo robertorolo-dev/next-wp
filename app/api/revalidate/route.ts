@@ -41,8 +41,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Missing contentType field" }, { status: 400 });
     }
 
-    console.log(`Revalidating content: ${contentType}${contentId ? ` (ID: ${contentId})` : ""}`);
-
     try {
       // Handle full revalidation
       if (contentType === "all") {

@@ -539,8 +539,6 @@ export async function getPortfolioItemsPaginated(
     cacheTags
   );
 
-  console.log(`[getPortfolioItemsPaginated] Page ${page} requested ${per_page}, received ${response.data.length}, total ${response.headers.total}`);
-
   return response;
 }
 
@@ -598,8 +596,19 @@ export async function getSiteOptions(): Promise<import("./wordpress.d").SiteOpti
     undefined,
     ["wordpress", "site-options"]
   );
-  console.log(`[getSiteOptions] Fetched options keys: ${Object.keys(options || {}).join(", ")}`);
   return options;
+}
+
+// Rank Math Headless CMS Support
+export async function getRankMathHead(url: string): Promise<string> {
+  const query = { url };
+  const response = await wordpressFetchGraceful<{ success: boolean; head: string }>(
+    "/wp-json/rankmath/v1/getHead",
+    { success: false, head: "" },
+    query,
+    ["wordpress", "rankmath-head", url]
+  );
+  return response.head || "";
 }
 
 export { WordPressAPIError };

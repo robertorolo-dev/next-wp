@@ -16,9 +16,10 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { User, Calendar, Tag as TagIcon } from "lucide-react";
-import { ArticleJsonLd, BreadcrumbJsonLd } from "next-seo";
+import { BreadcrumbJsonLd } from "next-seo"; // Removed ArticleJsonLd, using RankMath Schema instead
+import { RankMathSchema } from "@/components/seo/rank-math-schema";
 
-import { getMetadata } from "@/lib/seo";
+import { getMetadata, getRankMathMetadata } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { SocialShare } from "@/components/blog/social-share";
 import { SocialFollow } from "@/components/blog/social-follow";
@@ -41,7 +42,8 @@ export async function generateMetadata({
     };
   }
 
-  return getMetadata(post, { type: "article", path: `/blog/${post.slug}` });
+  const fallback = getMetadata(post, { type: "article", path: `/blog/${post.slug}` });
+  return await getRankMathMetadata(`/blog/${post.slug}`, fallback);
 }
 
 export default async function Page({
@@ -71,44 +73,7 @@ export default async function Page({
 
   return (
     <>
-      <ArticleJsonLd
-        type="BlogPosting"
-        url={`${siteConfig.site_domain}/blog/${post.slug}`}
-        headline={stripHtml(post.title.rendered)}
-        image={[featuredMedia?.source_url || `${siteConfig.site_domain}/opengraph-image.png`]}
-        datePublished={post.date}
-        dateModified={post.modified}
-        author={[
-          {
-            name: author.name,
-            url: `${siteConfig.site_domain}/blog/authors`,
-          },
-        ]}
-        publisher={{
-          name: siteConfig.site_name,
-          logo: {
-            url: `${siteConfig.site_domain}/kumocode.png`,
-          },
-        }}
-        description={stripHtml(post.excerpt.rendered)}
-        isAccessibleForFree={true}
-      />
-      <BreadcrumbJsonLd
-        items={[
-          {
-            name: "Home",
-            item: siteConfig.site_domain,
-          },
-          {
-            name: "Blog",
-            item: `${siteConfig.site_domain}/blog`,
-          },
-          {
-            name: stripHtml(post.title.rendered),
-            item: `${siteConfig.site_domain}/blog/${post.slug}`,
-          },
-        ]}
-      />
+      <RankMathSchema wpUrlPath={`/blog/${post.slug}`} />
       <Section>
         <Container className="max-w-[1400px] mx-auto">
           <div className="mb-12">

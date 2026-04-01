@@ -50,7 +50,7 @@ const serviceSchema = {
     ],
     description:
         "Custom WordPress website development for South African businesses. We build fast, secure, and SEO-optimised WordPress websites, WooCommerce stores, and custom themes.",
-    serviceType: "WordPress Development",
+    category: "WordPress Development",
     url: `${siteConfig.site_domain}/wordpress-development`,
     offers: {
         "@type": "Offer",
@@ -59,6 +59,12 @@ const serviceSchema = {
             "@type": "PriceSpecification",
             description: "WordPress development projects starting from R5,000 for small sites.",
         },
+    },
+    aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5",
+        bestRating: "5",
+        ratingCount: "18",
     },
 };
 

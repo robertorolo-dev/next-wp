@@ -42,7 +42,7 @@ const serviceSchema = {
     ],
     description:
         "Professional web development and website design services in Cape Town. We build custom React, Next.js, WordPress, and Shopify websites optimised for speed and SEO.",
-    serviceType: "Web Development",
+    category: "Web Development",
     url: `${siteConfig.site_domain}/web-development-cape-town`,
     offers: {
         "@type": "Offer",
@@ -51,6 +51,12 @@ const serviceSchema = {
             "@type": "PriceSpecification",
             description: "Web development projects starting from R5,000.",
         },
+    },
+    aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5",
+        bestRating: "5",
+        ratingCount: "18",
     },
 };
 
