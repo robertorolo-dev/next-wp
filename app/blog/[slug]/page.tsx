@@ -43,7 +43,9 @@ export async function generateMetadata({
   }
 
   const fallback = getMetadata(post, { type: "article", path: `/blog/${post.slug}` });
-  return await getRankMathMetadata(`/blog/${post.slug}`, fallback);
+  // Use post.link (the canonical WP permalink, e.g. /2026/02/13/slug/) to query Rank Math
+  // This avoids redirect-following in serverless environments which is unreliable
+  return await getRankMathMetadata(post.link, fallback);
 }
 
 export default async function Page({
@@ -73,7 +75,8 @@ export default async function Page({
 
   return (
     <>
-      <RankMathSchema wpUrlPath={`/blog/${post.slug}`} />
+      {/* Use post.link (real WP permalink) so Rank Math can find the post's schema */}
+      <RankMathSchema wpUrl={post.link} />
       <Section>
         <Container className="max-w-[1400px] mx-auto">
           <div className="mb-12">

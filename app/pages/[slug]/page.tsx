@@ -37,7 +37,7 @@ export async function generateMetadata({
   }
 
   const fallback = getMetadata(page, { type: "article", path: `/pages/${page.slug}` });
-  return await getRankMathMetadata(`/pages/${page.slug}`, fallback);
+  return await getRankMathMetadata(page.link, fallback);
 }
 
 export default async function Page({
@@ -54,7 +54,7 @@ export default async function Page({
 
   return (
     <>
-      <RankMathSchema wpUrlPath={`/pages/${page.slug}`} />
+      <RankMathSchema wpUrl={page.link} />
       <Section>
         <Container>
 

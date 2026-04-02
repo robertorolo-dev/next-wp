@@ -1,13 +1,22 @@
 import { getRankMathHead } from "@/lib/wordpress";
 import { siteConfig } from "@/site.config";
 
-export async function RankMathSchema({ wpUrlPath }: { wpUrlPath: string }) {
+/**
+ * Renders Rank Math JSON-LD schema blocks into the page.
+ *
+ * Pass `wpUrl` as the full canonical WordPress URL (e.g. post.link from the REST API)
+ * or a root-relative WP path (e.g. "/my-post-slug").
+ *
+ * Do NOT pass Next.js frontend paths like "/blog/slug" — WordPress doesn't
+ * understand that prefix and Rank Math will return no data.
+ */
+export async function RankMathSchema({ wpUrl }: { wpUrl: string }) {
     const baseUrl = process.env.WORDPRESS_URL;
     if (!baseUrl) return null;
 
-    let fullUrl = wpUrlPath;
-    if (!wpUrlPath.startsWith('http')) {
-        const formattedPath = wpUrlPath.startsWith('/') ? wpUrlPath : `/${wpUrlPath}`;
+    let fullUrl = wpUrl;
+    if (!wpUrl.startsWith('http')) {
+        const formattedPath = wpUrl.startsWith('/') ? wpUrl : `/${wpUrl}`;
         fullUrl = `${baseUrl.replace(/\/$/, '')}${formattedPath}`;
     }
 

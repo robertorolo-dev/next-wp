@@ -170,31 +170,41 @@ export function parseRankMathHead(html: string, baseMetadata: Metadata = {}): Me
 }
 
 /**
- * Helper to fetch and parse Rank Math headless metadata 
- * For 'wpUrlPath', pass the path of the post/page relative to WordPress, e.g. "/hello-world"
+ * Helper to fetch and parse Rank Math headless metadata.
+ * 
+ * Pass either:
+ * - A full canonical WordPress URL (e.g., post.link from the REST API) — preferred, no redirect needed
+ * - A root-relative WP path (e.g., "/my-post-slug") — WordPress resolves this itself
+ *
+ * Avoid passing Next.js frontend paths like "/blog/slug" — WordPress doesn't know about that
+ * prefix and will 404, causing Rank Math to return empty data.
  */
 export async function getRankMathMetadata(
-    wpUrlPath: string,
+    wpUrlOrPath: string,
     fallbackMetadata: Metadata = {}
 ): Promise<Metadata> {
     const baseUrl = process.env.WORDPRESS_URL;
     if (!baseUrl) return fallbackMetadata;
 
-    let fullUrl = wpUrlPath;
-    if (!wpUrlPath.startsWith('http')) {
-        const formattedPath = wpUrlPath.startsWith('/') ? wpUrlPath : `/${wpUrlPath}`;
+    // Build a full URL if a relative path was passed
+    let fullUrl = wpUrlOrPath;
+    if (!wpUrlOrPath.startsWith('http')) {
+        const formattedPath = wpUrlOrPath.startsWith('/') ? wpUrlOrPath : `/${wpUrlOrPath}`;
         fullUrl = `${baseUrl.replace(/\/$/, '')}${formattedPath}`;
     }
-    
+
     let headHtml = await getRankMathHead(fullUrl);
 
-    if (!headHtml) return fallbackMetadata;
+    // If RankMath returns empty or a 404 page, fall back to default metadata
+    if (!headHtml || headHtml.includes("Page Not Found - ") || headHtml.includes("<title>Page Not Found")) {
+        return fallbackMetadata;
+    }
 
-    // Cleanly rewrite backend API domains into frontend domains, 
-    // ensuring canonical tags and OG links map correctly to Next.js
+    // Rewrite WP backend domain to the Next.js frontend domain
+    // so canonical tags and OG URLs are correct in the rendered page
     const cleanBaseUrl = baseUrl.replace(/\/$/, '');
     const cleanSiteDomain = siteConfig.site_domain.replace(/\/$/, '');
     headHtml = headHtml.replace(new RegExp(cleanBaseUrl, 'g'), cleanSiteDomain);
-    
+
     return parseRankMathHead(headHtml, fallbackMetadata);
 }

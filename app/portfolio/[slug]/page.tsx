@@ -39,7 +39,7 @@ export async function generateMetadata({
     }
 
     const fallback = getMetadata(item, { type: "article", path: `/portfolio/${item.slug}` });
-    return await getRankMathMetadata(`/portfolio/${item.slug}`, fallback);
+    return await getRankMathMetadata(item.link, fallback);
 }
 
 export default async function Page({
@@ -70,7 +70,7 @@ export default async function Page({
 
     return (
         <>
-            <RankMathSchema wpUrlPath={`/portfolio/${item.slug}`} />
+            <RankMathSchema wpUrl={item.link} />
             <Section>
                 <Container className="max-w-[1600px] mx-auto">
                     <div className="mb-12">
