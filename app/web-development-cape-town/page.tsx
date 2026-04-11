@@ -25,10 +25,10 @@ export const metadata: Metadata = getMetadata(undefined, {
 
 const serviceSchema = {
     "@context": "https://schema.org",
-    "@type": "Service",
+    "@type": "Product",
     name: "Web Development Cape Town",
-    provider: {
-        "@type": "ProfessionalService",
+    brand: {
+        "@type": "Organization",
         name: "Kumocode",
         url: siteConfig.site_domain,
         logo: `${siteConfig.site_domain}/kumocode.png`,
@@ -45,12 +45,11 @@ const serviceSchema = {
     category: "Web Development",
     url: `${siteConfig.site_domain}/web-development-cape-town`,
     offers: {
-        "@type": "Offer",
+        "@type": "AggregateOffer",
         priceCurrency: "ZAR",
-        priceSpecification: {
-            "@type": "PriceSpecification",
-            description: "Web development projects starting from R5,000.",
-        },
+        lowPrice: "5000",
+        offerCount: "1",
+        description: "Web development projects starting from R5,000.",
     },
     aggregateRating: {
         "@type": "AggregateRating",

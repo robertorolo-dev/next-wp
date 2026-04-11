@@ -29,10 +29,10 @@ export const metadata: Metadata = getMetadata(undefined, {
 
 const serviceSchema = {
     "@context": "https://schema.org",
-    "@type": "Service",
+    "@type": "Product",
     name: "Shopify Development South Africa",
-    provider: {
-        "@type": "ProfessionalService",
+    brand: {
+        "@type": "Organization",
         name: "Kumocode",
         url: siteConfig.site_domain,
         logo: `${siteConfig.site_domain}/kumocode.png`,
@@ -53,12 +53,11 @@ const serviceSchema = {
     category: "Shopify Development",
     url: `${siteConfig.site_domain}/shopify-development`,
     offers: {
-        "@type": "Offer",
+        "@type": "AggregateOffer",
         priceCurrency: "ZAR",
-        priceSpecification: {
-            "@type": "PriceSpecification",
-            description: "Shopify store setup and development starting from R8,000.",
-        },
+        lowPrice: "8000",
+        offerCount: "1",
+        description: "Shopify store setup and development starting from R8,000.",
     },
     aggregateRating: {
         "@type": "AggregateRating",

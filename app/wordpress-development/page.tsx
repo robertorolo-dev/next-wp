@@ -29,10 +29,10 @@ export const metadata: Metadata = getMetadata(undefined, {
 
 const serviceSchema = {
     "@context": "https://schema.org",
-    "@type": "Service",
+    "@type": "Product",
     name: "WordPress Development South Africa",
-    provider: {
-        "@type": "ProfessionalService",
+    brand: {
+        "@type": "Organization",
         name: "Kumocode",
         url: siteConfig.site_domain,
         logo: `${siteConfig.site_domain}/kumocode.png`,
@@ -53,12 +53,11 @@ const serviceSchema = {
     category: "WordPress Development",
     url: `${siteConfig.site_domain}/wordpress-development`,
     offers: {
-        "@type": "Offer",
+        "@type": "AggregateOffer",
         priceCurrency: "ZAR",
-        priceSpecification: {
-            "@type": "PriceSpecification",
-            description: "WordPress development projects starting from R5,000 for small sites.",
-        },
+        lowPrice: "5000",
+        offerCount: "1",
+        description: "WordPress development projects starting from R5,000 for small sites.",
     },
     aggregateRating: {
         "@type": "AggregateRating",

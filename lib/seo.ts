@@ -160,10 +160,22 @@ export function parseRankMathHead(html: string, baseMetadata: Metadata = {}): Me
         metadata.openGraph.title = stripHtml(ogTitleMatch[1]);
     }
 
-    const ogDescMatch = html.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']*)["'][^>]*>/i) || html.match(/<meta[^>]*content=["']([^"']*)["'][^>]*property=["']og:description["'][^>]*>/i);
+    const ogDescMatch = html.match(/<meta[^>]*property=["']og:description["'][^>]*content=["']([^"']*)[\"'][^>]*>/i) || html.match(/<meta[^>]*content=["']([^"']*)[\"'][^>]*property=["']og:description["'][^>]*>/i);
     if (ogDescMatch && ogDescMatch[1]) {
         if (!metadata.openGraph) metadata.openGraph = {};
         metadata.openGraph.description = stripHtml(ogDescMatch[1]);
+    }
+
+    // Rank Math doesn't output Twitter card tags — sync twitter metadata
+    // to match the Rank Math title/description so all tags are consistent.
+    const finalDesc = metadata.description ?? (metadata.openGraph as any)?.description;
+    const finalTitle = metadata.title ?? (metadata.openGraph as any)?.title;
+    if (finalDesc || finalTitle) {
+        metadata.twitter = {
+            ...(metadata.twitter as any ?? {}),
+            ...(finalTitle ? { title: typeof finalTitle === 'string' ? finalTitle : (finalTitle as any).absolute } : {}),
+            ...(finalDesc ? { description: finalDesc as string } : {}),
+        };
     }
 
     return metadata;
