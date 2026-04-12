@@ -56,6 +56,7 @@ const serviceSchema = {
         "@type": "AggregateOffer",
         priceCurrency: "ZAR",
         lowPrice: "5000",
+        highPrice: "80000",
         offerCount: "1",
         description: "WordPress development projects starting from R5,000 for small sites.",
     },

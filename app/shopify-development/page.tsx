@@ -56,6 +56,7 @@ const serviceSchema = {
         "@type": "AggregateOffer",
         priceCurrency: "ZAR",
         lowPrice: "8000",
+        highPrice: "60000",
         offerCount: "1",
         description: "Shopify store setup and development starting from R8,000.",
     },
