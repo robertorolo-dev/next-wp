@@ -3,6 +3,7 @@ import { Section, Container } from '@/components/craft';
 import { WebsiteSpeedTest } from '@/components/speed-test/website-speed-test';
 
 import { getMetadata } from '@/lib/seo';
+import { siteConfig } from '@/site.config';
 
 export const metadata: Metadata = getMetadata(undefined, {
   title: 'Free Website Speed Test & SEO Audit | Kumocode',
@@ -15,7 +16,7 @@ export default function FreeWebsiteSpeedTestPage() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free Website Speed Test & SEO Audit",
-    "url": "https://kumocode.co.za/free-website-speed-test",
+    "url": `${siteConfig.site_domain}/free-website-speed-test`,
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "All",
     "description": "Test your website speed, SEO, and performance for free. Uncover hidden issues that are costing you customers and get actionable insights.",
@@ -27,7 +28,7 @@ export default function FreeWebsiteSpeedTestPage() {
     "provider": {
       "@type": "Organization",
       "name": "Kumocode",
-      "url": "https://kumocode.co.za"
+      "url": siteConfig.site_domain
     }
   };
 

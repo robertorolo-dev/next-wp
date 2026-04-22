@@ -48,6 +48,7 @@ const serviceSchema = {
         "@type": "AggregateOffer",
         priceCurrency: "ZAR",
         lowPrice: "5000",
+        highPrice: "80000",
         offerCount: "1",
         description: "Web development projects starting from R5,000.",
     },

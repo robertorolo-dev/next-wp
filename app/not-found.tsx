@@ -1,7 +1,13 @@
 import { Section, Container } from "@/components/craft";
 import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
 
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Page Not Found | Kumocode",
+  robots: "noindex, nofollow",
+};
 
 export default function NotFound() {
   return (

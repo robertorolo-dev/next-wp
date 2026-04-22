@@ -96,7 +96,7 @@ const Nav = ({ className, children, id }: NavProps) => {
         >
           <Image
             src={Logo}
-            alt="Logo"
+            alt="Kumocode — Web Development South Africa"
             priority
             className="dark:invert"
             width={170}
@@ -136,7 +136,7 @@ const Footer = async () => {
             <Link href="/">
               <Image
                 src={cat}
-                alt="cat"
+                alt="Kumocode mascot"
                 loading="lazy"
                 className="dark:invert"
                 width={80}
@@ -146,17 +146,17 @@ const Footer = async () => {
             <p>{siteConfig.site_description}</p>
           </div>
           <div className="flex flex-col gap-4">
-            <h5 className="font-bold uppercase tracking-widest text-sm">Follow Us</h5>
+            <p className="font-bold uppercase tracking-widest text-sm">Follow Us</p>
             <SocialFollow links={siteOptions?.social_links} />
           </div>
           <div className="flex flex-col gap-2 text-sm">
-            <h5 className="font-bold uppercase tracking-widest text-sm mb-2">Service Areas</h5>
+            <p className="font-bold uppercase tracking-widest text-sm mb-2">Service Areas</p>
             <Link className="hover:underline underline-offset-4 font-medium" href="/web-development-cape-town">Cape Town</Link>
             <Link className="hover:underline underline-offset-4 font-medium" href="/web-development-johannesburg">Johannesburg</Link>
             <Link className="hover:underline underline-offset-4 font-medium" href="/web-development-durban">Durban</Link>
           </div>
           <div className="flex flex-col gap-2 text-sm">
-            <h5 className="font-bold uppercase tracking-widest text-sm mb-2">Links</h5>
+            <p className="font-bold uppercase tracking-widest text-sm mb-2">Links</p>
             {Object.entries(mainMenu).map(([key, href]) => (
               <Link
                 className="hover:underline underline-offset-4 font-medium"

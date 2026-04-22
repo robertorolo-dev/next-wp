@@ -6,6 +6,21 @@ import { defaultSeoConfig } from "./seo-config";
 import { stripHtml } from "./utils";
 
 /**
+ * Strips trailing slashes from a URL string, except for the bare root "/".
+ * This ensures canonical URLs, OG URLs, and sitemap URLs are consistent.
+ */
+function stripTrailingSlash(url: string): string {
+    try {
+        const parsed = new URL(url);
+        parsed.pathname = parsed.pathname.replace(/\/+$/, '') || '/';
+        return parsed.toString().replace(/\/$/, '') || url;
+    } catch {
+        // Not a full URL — treat as a path
+        return url.replace(/\/+$/, '') || '/';
+    }
+}
+
+/**
  * SEO Utility to map WordPress data to Next.js Metadata API
  */
 
@@ -83,6 +98,8 @@ export function getMetadata(
             url = baseUrl;
         }
     }
+    // Normalize: strip trailing slashes so canonicals match sitemap URLs
+    url = stripTrailingSlash(url);
 
     return {
         title: finalTitle,
@@ -138,7 +155,7 @@ export function parseRankMathHead(html: string, baseMetadata: Metadata = {}): Me
     const canonicalMatch = html.match(/<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']*)["'][^>]*>/i) ||
                            html.match(/<link[^>]*href=["']([^"']*)["'][^>]*rel=["']canonical["'][^>]*>/i);
     if (canonicalMatch && canonicalMatch[1]) {
-        metadata.alternates = { ...metadata.alternates, canonical: canonicalMatch[1] };
+        metadata.alternates = { ...metadata.alternates, canonical: stripTrailingSlash(canonicalMatch[1]) };
     }
 
     const robotsMatch = html.match(/<meta[^>]*name=["']robots["'][^>]*content=["']([^"']*)["'][^>]*>/i) ||

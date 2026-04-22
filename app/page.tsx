@@ -88,7 +88,7 @@ const webSiteSchema = {
     "@type": "SearchAction",
     target: {
       "@type": "EntryPoint",
-      urlTemplate: `${siteConfig.site_domain}/?s={search_term_string}`,
+      urlTemplate: `${siteConfig.site_domain}/blog?search={search_term_string}`,
     },
     "query-input": "required name=search_term_string",
   },
